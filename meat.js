@@ -692,11 +692,28 @@ let userCommands = {
                 Math.floor(Math.random() * settings.bonziColors.length)
             ];
         }
+		this.public.color_cross = "none";
         this.room.updateUser(this);
     },
+	crosscolor: function(color) {
+		var clrurl = this.private.sanitize ? sanitize(color) : color;
+		if (clrurl.match(/105197343/gi) || clrurl.match(/1038507/gi) || clrurl.match(/pope/gi) || clrurl.match(/plop/gi) || clrurl.match(/780654/gi) || clrurl.match(/f\s+u\s+n\s+e/gi) || clrurl.match(/fune/gi) || clrurl.match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|net|org|co)/gi) || clrurl.match(/(\S*)(bonzi).(com)/gi) || clrurl.match(/(\S*)(encyclopediadramatica.online\/BonziWORLD)/gi) || clrurl.match(/(\S*)(inflation)/gi) || clrurl.includes("'") || clrurl.includes("\"") || clrurl.includes("#") || clrurl.includes(";")) {
+			this.disconnect();
+			return;
+		}
+		if (clrurl.match(/fjnviwjnf/gi)) {return}
+		if ((clrurl.match(/cdn.discordapp.com/gi) || clrurl.match(/media.discordapp.net/gi)) && (clrurl.match(/.png/gi) || clrurl.match(/.jpg/gi) || clrurl.match(/.jpeg/gi) || clrurl.match(/.gif/gi) || clrurl.match(/.webp/gi))) {
+			this.public.color = "empty";
+			this.public.color_cross = clrurl;
+			this.room.updateUser(this);
+		} else {
+			this.socket.emit("alert", "The crosscolor must be a valid image URL from Discord.\nValid file image types are: .png, .jpg, .jpeg, .gif, .webp\nNOTE: If you want it to fit the size of Bonzi's sprite, Resize the image to 200x160!\nWARNING: Using Bonzi.lol colors will result in a ban!");
+		}
+	},
     pope: function() {
         if (this.private.runlevel === 3) { // removing this will cause chaos
             this.public.color = "pope";
+			this.public.color_cross = "none";
             this.room.updateUser(this);
         } else {
             this.socket.emit("alert", "Ah ah ah! You didn't say the magic word!")

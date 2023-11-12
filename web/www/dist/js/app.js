@@ -19,6 +19,8 @@ var LoggedIn = false;
 var Room_ID = "";
 var Bonzi_Color = "";
 var Bonzi_Name = "";
+var allowCrossColors = false;
+var warnedUserAboutUGC = false;
 
 const date = new Date().toLocaleTimeString();
 function getBonziHEXColor(color) {
@@ -450,6 +452,34 @@ var Bonzi = (function () {
                 {
                     key: "update",
                     value: function () {
+						if (allowCrossColors == true) {
+                            if (this.color == "empty" && this.userPublic.color_cross != 'none') { 
+                                this.$canvas.css("background-image", `url("${this.userPublic.color_cross}")`);
+                            } else {
+                                this.$canvas.css("background-image", `url("/img/agents/${this.color}.png")`);
+                            }
+                            if (this.color != "empty" && this.userPublic.color_cross == 'none') {
+                                this.$canvas.css("background-image", `url()`);
+                            }
+                        } else if (allowCrossColors == false) {
+                            if (this.color == "empty" && this.userPublic.color_cross != 'none') {
+                                this.$canvas.css("background-image", `url("/img/agents/purple.png")`);
+                            } else {
+                                this.$canvas.css("background-image", `url("/img/agents/${this.color}.png")`);
+                            }
+                            if (this.color != "empty" && this.userPublic.color_cross == 'none') {
+                                this.$canvas.css("background-image", `url()`);
+                            }
+                        }
+                        if (this.color == "empty" && this.userPublic.color_cross != 'none') {
+                            if (!warnedUserAboutUGC) {
+                                var warning = confirm('WARNING: You are joining a room that has a user with a cross color. Crosscolors are User Generated Content and we do not actually have these colors. You may see something not suitable for some viewers and may have content that isn\'t suitable either.\n\nClick OK to allow crosscolors, Click Cancel to disable crosscolors.');
+                                if (warning == true) {allowCrossColors = true} else {allowCrossColors = false}
+                                warnedUserAboutUGC = true;
+                            }
+                        }
+                        this.$canvas.css("background-position-x", `-${Math.floor(this.sprite.currentFrame % 17) * this.data.size.x}px`);
+                        this.$canvas.css("background-position-y", `-${Math.floor(this.sprite.currentFrame / 17) * this.data.size.y}px`);
 							var analyser = this.auCtx.createAnalyser();
 							if (this.source && this.analyser) {
 								this.freqData = new Uint8Array(this.analyser.frequencyBinCount);
@@ -550,11 +580,6 @@ var Bonzi = (function () {
                     value: function () {
                         this.$nametag.text(this.userPublic.name);
 						Bonzi_Name = this.userPublic.name;
-						if(getCookie("name") == ""){
-							if(this.userPublic.name == "") {setCookie("name", "Anonymous", 365)} else {setCookie("name", encodeURIComponent(this.userPublic.name), 365)}
-						} else {
-							if(this.userPublic.name == "") {setCookie("name", "Anonymous", 365)} else {setCookie("name", encodeURIComponent(this.userPublic.name), 365)}
-						};
                     },
                 },
                 // you make too many errors
@@ -1473,21 +1498,7 @@ function login() {
     setTimeout(function () {socket.emit("login", { name: $("#login_name").val(), room: $("#login_room").val() }), bzSetup()}, 954);
 	if ($("#login_room").val().includes("test")) debug = true;
 	if ($("#login_room").val().includes("debug")) debug = true;
-    var date = new Date();
-    date.setDate(new Date().getDate() + 365);
-    if(getCookie("name") == ""){
-        if($("#login_name").val() == "") {
-            setCookie("name", "Anonymous", 365)
-        } else {
-            setCookie("name", encodeURIComponent($("#login_name").val()), 365)
-        }
-    } else {
-        if($("#login_name").val() == "") {
-            setCookie("name", "Anonymous", 365)
-        } else {
-            setCookie("name", encodeURIComponent($("#login_name").val()), 365)
-        }
-    }
+
 	login_sfx.play();
     LoggedIn = true;
 }
@@ -1987,7 +1998,7 @@ window.onload = () => {
             selector: "#themes_btn",
             items: {
                 default: { name: "Default", callback: function () { theme('') } },
-                custom: { name: "Custom", callback: function () { var url = prompt('Insert Supported Image URL for usage as the Background', `${window.location.origin}/img/desktop/__Themes/XP/wallpaper-xp.jpg`); if (getCookie("custom_theme") == '') { if (url == "") { setCookie("custom_theme", "None", 365); } else { setCookie("custom_theme", `${encodeURIComponent(url)}`, 365); } } else { if (url == "") { setCookie("custom_theme", "None", 365); } else { setCookie("custom_theme", `${encodeURIComponent(url)}`, 365); } }; if (url == "") { theme(); }; if (url) { theme(`#content{background-image:url("./img/desktop/logo.png"), url("${url}"); background-repeat: no-repeat, repeat; background-size: auto, cover;}'`); } } },
+                custom: { name: "Custom", callback: function () { var url = prompt('Insert Supported Image URL for usage as the Background', `${window.location.origin}/img/desktop/__Themes/XP/wallpaper-xp.jpg`); if (url == "") { theme(); }; if (url) { theme(`#content{background-image:url("./img/desktop/logo.png"), url("${url}"); background-repeat: no-repeat, repeat; background-size: auto, cover;}'`); } } },
                 bonziverse: { name: "BonziVERSE", callback: function () { theme('#content{background-color:black;background:url("./img/desktop/__Themes/BonziVERSE/logo-verse.png"), url("./img/desktop/__Themes/BonziVERSE/bonzi-verse.png"), url("./img/desktop/__Themes/BonziVERSE/wallpaper-verse.jpg");background-repeat: no-repeat; background-position: top left, center, center; background-size: auto, auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/BonziVERSE/taskbar-verse.png")}#chat_tray{display:none}#chat_send{background:url("./img/desktop/__Themes/BonziVERSE/start-verse.png")'); } },
                 vaporwave: { name: "Vaporwave", callback: function () { theme('#chat_log{margin-bottom:28px!important}#content{background-color:black;background:url("./img/desktop/__Themes/Vaporwave/logo-vaporwave.png"), url("./img/desktop/__Themes/Vaporwave/bonzi-vaporwave.png"), url("./img/desktop/__Themes/Vaporwave/wallpaper-vaporwave.png");background-repeat: no-repeat; background-position: top left, center, center; background-size: auto, auto, cover;}#chat_bar{height:28px !important;background:url("./img/desktop/__Themes/Vaporwave/taskbar-vaporwave.png")}#chat_tray{background-image:url("./img/desktop/__Themes/Vaporwave/tray_left-vaporwave.png"),url("./img/desktop/__Themes/Vaporwave/tray_right-vaporwave.png"),url("./img/desktop/__Themes/Vaporwave/tray-vaporwave.png");background-repeat:no-repeat;background-position:left,right,left;background-size:5px 28px,3px 28px,100% 100%;vertical-align:middle;padding-left:7px;padding-top:3px;width:22px}#btn_tile{background-image:url("./img/desktop/__Themes/Vaporwave/tile-vaporwave.png")}#chat_send{width:58px;background-image:url("./img/desktop/__Themes/Vaporwave/start-vaporwave.png");background-size:100%;background-repeat:no-repeat;box-sizing:border-box;color:#000;font-family:"MS Sans Serif",Tahoma,sans-serif;font-style:normal;font-weight:700;letter-spacing:1px;font-size:11px;text-shadow:none;padding-left:21px;text-transform:capitalize}#chat_send:hover{background-position:0 -28px !important}#chat_send:active{background-position:0 -56px !important}'); var vaporwave_98 = new Audio("./sfx/ui/win9x/vaporwave.mp3"); vaporwave_98.play(); } },
                 dark: { name: "Dark Mode", callback: function () { theme('::selection {background: #a6a6a68c !important}#arcade_label, #themes_label img {filter: grayscale(100%)}#chat_log_list::-webkit-scrollbar-thumb {background-color: #414141 !important;border: 2px solid #393939 !important}#chat_log {background-color: rgb(31 31 31 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #5d5d5d !important}#chat_log #chat_log_list ul li.bonzi-message.bonzi-event {color: #4c4c4c !important}#chat_log #chat_log_header .clh-col#chat_log_controls ul li {color: #3d3d3d !important}input[type="text"]{background-color:#151515!important;border:1px #676767!important;color:#9d9d9ded!important}#chat_bar{background-image:url("./img/desktop/__Themes/Dark/taskbar-dark.png")}#chat_send{background-image:url("./img/desktop/__Themes/Dark/start-dark.png")}#chat_tray{background-image:url("./img/desktop/__Themes/Dark/tray_left-dark.png"), url("./img/desktop/__Themes/Dark/tray-dark.png")}#content{background-color:black;background-image:url("./img/desktop/__Themes/Dark/logo-dark.png"), url("./img/desktop/__Themes/Dark/bonzi-dark.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, auto;}.xp_dialog,.message_cont,.message_cont_arcade,.message_cont_pinball,.message_cont_solitaire{background:#090909;color:#b9b9b9;border:#363636 solid 1px}'); } },
@@ -2059,35 +2070,6 @@ $(document).ready(() => {
 socket.on('error', (err) => {
     console.error(err);
 });
-
-
-function setCookie(cname, cvalue, exdays) {
-  const date = new Date();
-  if(exdays == undefined || "" || 0 || false) {exdays = 365}
-  date.setTime(date.getTime() + (exdays * 24 * 60 * 60 * 1000));
-  let expires = `expires=${date.toUTCString()}`;
-  document.cookie = `${cname}=${cvalue};${expires};path=/`;
-}
-
-function getCookie(cname) {
-  let name = `${cname}=`;
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
-
-if (getCookie("name") != "") {$("#login_name").val(getCookie("name"))}
-if (getCookie("custom_theme") != "" || "None") {theme(`#content{background-image:url("./img/desktop/logo.png"), url("${getCookie("custom_theme")}"); background-repeat: no-repeat, repeat; background-size: auto, cover;}'`)}
-if (getCookie("custom_theme") == "" || "None") {theme()}
 
 
 const canvas = document.getElementById('bonzi_canvas');
