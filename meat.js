@@ -925,7 +925,8 @@ class User {
         this.public = {
             color: settings.bonziColors[Math.floor(
                 Math.random() * settings.bonziColors.length
-            )]
+            )],
+			color_cross: 'none'
         };
 
         log.access.log('info', 'connect', {
