@@ -17,5 +17,6 @@
 - [ ] Update bootstrap.css version [**0% done**]
 - [ ] Profile code to find slowdowns [**0% done**]
 - [ ] Port BWE and vanilla BonziWORLD to Java [**0% done**]
+- [ ] Make some kind of BonziTV for BWE [**0% done**]
 
 <hr>
