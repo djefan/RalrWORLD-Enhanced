@@ -697,7 +697,7 @@ let userCommands = {
     },
 	crosscolor: function(color) {
 		var clrurl = this.private.sanitize ? sanitize(color) : color;
-		if (clrurl.match(/105197343/gi) || clrurl.match(/1038507/gi) || clrurl.match(/pope/gi) || clrurl.match(/plop/gi) || clrurl.match(/780654/gi) || clrurl.match(/f\s+u\s+n\s+e/gi) || clrurl.match(/fune/gi) || clrurl.match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|net|org|co)/gi) || clrurl.match(/(\S*)(bonzi).(com)/gi) || clrurl.match(/(\S*)(encyclopediadramatica.online\/BonziWORLD)/gi) || clrurl.match(/(\S*)(inflation)/gi) || clrurl.includes("'") || clrurl.includes("\"") || clrurl.includes("#") || clrurl.includes(";")) {
+		if (clrurl.match(/105197343/gi) || clrurl.match(/1038507/gi) || clrurl.match(/pope/gi) || clrurl.match(/plop/gi) || clrurl.match(/780654/gi) || clrurl.match(/f\s+u\s+n\s+e/gi) || clrurl.match(/fune/gi) || clrurl.match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|net|org|co)/gi) || clrurl.match(/(\S*)(bonzi).(com)/gi) || clrurl.match(/(\S*)(encyclopediadramatica.online\/BonziWORLD)/gi) || clrurl.match(/(\S*)(inflation)/gi) || clrurl.includes("'") || clrurl.includes("\"")) {
 			this.disconnect();
 			return;
 		}
