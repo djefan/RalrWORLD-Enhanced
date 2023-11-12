@@ -482,6 +482,7 @@ var Bonzi = (function () {
                         this.$canvas.css("background-position-y", `-${Math.floor(this.sprite.currentFrame / 17) * this.data.size.y}px`);
 							var analyser = this.auCtx.createAnalyser();
 							if (this.source && this.analyser) {
+								if(this.userPublic.color_cross != 'none') {return};
 								this.freqData = new Uint8Array(this.analyser.frequencyBinCount);
 								this.analyser.getByteFrequencyData(this.freqData);
 								var percent = Math.round(((max(this.freqData) - 128) / 128)*100);
