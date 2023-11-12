@@ -1680,7 +1680,7 @@ function bzSetup() {
         socket.on("leave", (data) => {
             var b = bonzis[data.guid];
             setTimeout(() => {
-                var surf_gone_sfx = new Audio("./sfx/agents/bye.mp3");
+                var surf_gone_sfx = new Audio("./sfx/agents/bonzi/hd/leave.mp3");
                 surf_gone_sfx.play();
             }, 600);
             void 0 !== b &&
