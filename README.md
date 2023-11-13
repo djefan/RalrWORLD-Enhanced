@@ -14,6 +14,7 @@ BonziWORLD Enhanced is a fork of vanilla BonziWORLD which provides simple qol im
 ## What features make this different than vanilla BonziWORLD?
 Some changes which make this stand out from the standard code by [heyjoeway](https://github.com/heyjoeway/BonziWORLD):
 - Decompressed bonzibuddy sprites (HD)
+- Custom BonziBuddy sprites from the web (crosscolors)
 - A chat logger
 - Browser notifications for new chat messages
 - Random godwords for people using [replit](https://replit.com) or [glitch](https://glitch.me)
