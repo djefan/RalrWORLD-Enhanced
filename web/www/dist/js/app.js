@@ -1932,7 +1932,7 @@ window.onload = () => {
                     behh: { name: "Backflip +swag", callback: () => { socket.emit("command", { list: ["backflip", "swag"] })} },
                     swag: { name: "Swag", callback: () => { socket.emit("command", { list: ["swag"] })} },
                 }
-            },
+            }/*,
             settings: () => {
                 const obj = {};
                 for (const key in settings) {
@@ -1950,15 +1950,15 @@ window.onload = () => {
                     name: "Settings",
                     items: obj,
                 };
-            },
+            },*/
         },
-        events: {
+        /*events: {
             show: (opt) => {
                 for (const key in settings) {
                     opt.inputs[key].selected = settings[key].value;
                 }
             }
-        }
+        }*/
     }),
         $.contextMenu({
             selector: "#page_login",
@@ -1966,7 +1966,7 @@ window.onload = () => {
                 changelog: {
                     name: "See Changelog",
                     callback: () => { $('#page_changelog').show()}
-                },
+                }/*,
                 settings: () => {
                     const obj = {};
                     for (const key in settings) {
@@ -1984,15 +1984,15 @@ window.onload = () => {
                         name: "Settings",
                         items: obj,
                     };
-                },
+                },*/
             },
-            events: {
+            /*events: {
                 show: (opt) => {
                     for (const key in settings) {
                         opt.inputs[key].selected = settings[key].value;
                     }
                 }
-            }
+            }*/
         }),
         $.contextMenu({
             selector: "#themes_btn",
@@ -2075,10 +2075,10 @@ socket.on('error', (err) => {
 const canvas = document.getElementById('bonzi_canvas');
 const gl = canvas.getContext('webgl');
 
-const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+/*const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
 const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
 const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
 
-$("#debug-device-stats").html(`<span>${vendor}<br>${renderer}<br>${navigator.platform}<br>${navigator.userAgent}<br>${navigator.language}<br>${navigator.connection.effectiveType}<br></span>`);
+$("#debug-device-stats").html(`<span>${vendor}<br>${renderer}<br>${navigator.platform}<br>${navigator.userAgent}<br>${navigator.language}<br>${navigator.connection.effectiveType}<br></span>`);*/
 
 //# sourceMappingURL=app.js.map
