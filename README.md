@@ -39,7 +39,7 @@ Some changes which make this stand out from the standard code by [heyjoeway](htt
 ### License & Copyright
 MIT
 
-Copyright (c) 2023-2026 Cosmic
+Copyright (c) 2023-2026 [Cosmic](https://github.com/CosmicStar98/BonziWORLD-Enhanced)
 
 
 <hr>
