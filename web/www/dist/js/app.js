@@ -452,7 +452,7 @@ var Bonzi = (function () {
                 {
                     key: "update",
                     value: function () {
-						if (allowCrossColors == true) {
+						if (allowCrossColors == true) { // Written by Seamus | https://github.com/Daisreich
                             if (this.color == "empty" && this.userPublic.color_cross != 'none') { 
                                 this.$canvas.css("background-image", `url("${this.userPublic.color_cross}")`);
                             } else {
@@ -471,15 +471,15 @@ var Bonzi = (function () {
                                 this.$canvas.css("background-image", `url()`);
                             }
                         }
-                        if (this.color == "empty" && this.userPublic.color_cross != 'none') {
+                        if (this.color == "empty" && this.userPublic.color_cross != 'none') { // Written by Seamus | https://github.com/Daisreich
                             if (!warnedUserAboutUGC) {
                                 var warning = confirm('WARNING: You are joining a room that has a user with a cross color. Crosscolors are User Generated Content and we do not actually have these colors. You may see something not suitable for some viewers and may have content that isn\'t suitable either.\n\nClick OK to allow crosscolors, Click Cancel to disable crosscolors.');
                                 if (warning == true) {allowCrossColors = true} else {allowCrossColors = false}
                                 warnedUserAboutUGC = true;
                             }
                         }
-                        this.$canvas.css("background-position-x", `-${Math.floor(this.sprite.currentFrame % 17) * this.data.size.x}px`);
-                        this.$canvas.css("background-position-y", `-${Math.floor(this.sprite.currentFrame / 17) * this.data.size.y}px`);
+                        this.$canvas.css("background-position-x", `-${Math.floor(this.sprite.currentFrame % 17) * this.data.size.x}px`); // Written by Seamus | https://github.com/Daisreich
+                        this.$canvas.css("background-position-y", `-${Math.floor(this.sprite.currentFrame / 17) * this.data.size.y}px`); // Written by Seamus | https://github.com/Daisreich
 							var analyser = this.auCtx.createAnalyser();
 							if (this.source && this.analyser) {
 								this.freqData = new Uint8Array(this.analyser.frequencyBinCount);
