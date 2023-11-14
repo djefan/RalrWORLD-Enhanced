@@ -1,3 +1,5 @@
+jQuery.noConflict();
+var $ = jQuery.noConflict();
 $(document).ready(() => {
 	if (window.location.pathname == "/" || "/index.html" || "/index.htm") {
 		$.get(window.location.origin + "/dist/json/version.json", (result) => {
