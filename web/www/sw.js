@@ -402,7 +402,7 @@ self.addEventListener("install", (e) => {
                 location.origin + "/sfx/agents/bonzi/yawn.mp3",
                 location.origin + "/sfx/agents/bonzi/hd/join.mp3",
                 location.origin + "/sfx/agents/bonzi/hd/leave.mp3",
-                location.origin + "/sfx/memes/and-his-name-is-john-cena.mp3",
+                /*location.origin + "/sfx/memes/and-his-name-is-john-cena.mp3",
                 location.origin + "/sfx/memes/bomb-has-been-planted.mp3",
                 location.origin + "/sfx/memes/bruh.mp3",
                 location.origin + "/sfx/memes/cod-mw2-mission-failed.mp3",
@@ -441,7 +441,7 @@ self.addEventListener("install", (e) => {
                 location.origin + "/sfx/memes/waltuh.mp3",
                 location.origin + "/sfx/memes/was-that-the-bite-of-87.mp3",
                 location.origin + "/sfx/memes/wasted.mp3",
-                location.origin + "/sfx/memes/you-shall-not-pass.mp3",
+                location.origin + "/sfx/memes/you-shall-not-pass.mp3",*/
                 location.origin + "/sfx/ui/bonzi/ab_logon.mp3",
                 location.origin + "/sfx/ui/bonzi/ban.mp3",
                 location.origin + "/sfx/ui/bonzi/brrrrrrt.mp3",
