@@ -697,7 +697,7 @@ let userCommands = {
     },
 	crosscolor: function(color) { // Written by Seamus | https://github.com/Daisreich
 		var clrurl = this.private.sanitize ? sanitize(color) : color;
-		if (clrurl.match(/105197343/gi) || clrurl.match(/1038507/gi) || clrurl.match(/pope/gi) || clrurl.match(/plop/gi) || clrurl.match(/780654/gi) || clrurl.match(/f\s+u\s+n\s+e/gi) || clrurl.match(/fune/gi) || clrurl.match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|net|org|co)/gi) || clrurl.match(/(\S*)(bonzi).(com)/gi) || clrurl.match(/(\S*)(encyclopediadramatica.online\/BonziWORLD)/gi) || clrurl.match(/(\S*)(inflation)/gi) || clrurl.includes("'") || clrurl.includes("\"")) {
+		if (clrurl.match(/105197343/gi) || clrurl.match(/1038507/gi) || clrurl.match(/pope/gi) || clrurl.match(/plop/gi) || clrurl.match(/780654/gi) || clrurl.match(/f\s+u\s+n\s+e/gi) || clrurl.match(/fune/gi) || clrurl.match(/(\S*)(bonzi|bonziworld|uranohoshi).(lol|ga|tk|cf|net|org|in)/gi) || clrurl.match(/(\S*)(bonzi).(com)/gi) || clrurl.match(/(\S*)(encyclopediadramatica.online\/BonziWORLD)/gi) || clrurl.match(/(\S*)(inflation)/gi) || clrurl.includes("'") || clrurl.includes("\"")) {
 			this.disconnect();
 			return;
 		}
@@ -776,7 +776,7 @@ let userCommands = {
         }
         if (argsString.trim().match(/f\s+u\s+n\s+e/gi)) {return}
         if (argsString.trim().match(/fune/gi)) {return}
-        if (argsString.trim().match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|net|org)/gi)) {return}
+        if (argsString.trim().match(/(\S*)(bonzi|bonziworld|uranohoshi).(lol|ga|tk|cf|net|org|in)/gi)) {return}
         if (argsString.trim().match(/(\S*)(bonzi).(com)/gi)) {return}
         if (argsString.trim().match(/(\S*)(encyclopediadramatica.online\/BonziWORLD)/gi)) {return}
         if (argsString.trim().match(/http:\/\//gi)) {return}
@@ -1043,7 +1043,7 @@ class User {
 				reason: "nameMal"
 			});
         }
-        if(data.name.trim().match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|net|org)/gi)) {
+        if(data.name.trim().match(/(\S*)(bonzi|bonziworld|uranohoshi).(lol|ga|tk|cf|net|org|in)/gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
@@ -1181,7 +1181,7 @@ class User {
                     .trim().replaceAll(/https:\/\//gi, "hgrunt/ass.wav")
                     .trim().replaceAll(/(discord.gg\/|discord.gg)/gi, "hgrunt/ass.wav")
                     .trim().replaceAll(/(discord.com\/|discord.com)/gi, "hgrunt/ass.wav")
-                    .trim().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|net|org)/gi, "bwe")
+                    .trim().replaceAll(/(\S*)(bonzi|bonziworld|uranohoshi).(lol|ga|tk|cf|net|org|in)/gi, "bwe")
                     .trim().replaceAll(/(\S*)(bonzi).(com)/gi, "bwe")
                     .trim().replaceAll(/(\S*)(encyclopediadramatica.online\/BonziWORLD)/gi, "bwe")
                     .trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
@@ -1198,7 +1198,7 @@ class User {
                     .trim().replaceAll(/https:\/\//gi, "hgrunt/ass.wav")
                     .trim().replaceAll(/(discord.gg\/|discord.gg)/gi, "hgrunt/ass.wav")
                     .trim().replaceAll(/(discord.com\/|discord.com)/gi, "hgrunt/ass.wav")
-                    .trim().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|net|org)/gi, "bwe")
+                    .trim().replaceAll(/(\S*)(bonzi|bonziworld|uranohoshi).(lol|ga|tk|cf|net|org|in)/gi, "bwe")
                     .trim().replaceAll(/(\S*)(bonzi).(com)/gi, "bwe")
                     .trim().replaceAll(/(\S*)(encyclopediadramatica.online\/BonziWORLD)/gi, "bwe")
                     .trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
