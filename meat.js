@@ -1166,12 +1166,12 @@ class User {
         if (typeof data.text == "undefined")
             return;
 
-        let text = this.private.sanitize ? sanitize(sanitizeHTML(data.text)) : sanitizeHTML(data.text);
+        let text = this.private.sanitize ? sanitize(sanitizeHTML(data.text)) : data.text;
         if ((text.length <= this.room.prefs.char_limit) && (text.length > 0)) {
             this.room.emit('talk', {
                 guid: this.guid,
                 name: this.name,
-                text: sanitizeHTML(text)
+                text: text
             });
         }
         if (text.length < 1000) {
