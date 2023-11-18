@@ -1166,7 +1166,7 @@ class User {
         if (typeof data.text == "undefined")
             return;
 
-        let text = this.private.sanitize ? sanitize(sanitizeHTML(data.text)) : data.text;
+        let text = this.private.sanitize ? sanitize(sanitizeHTML(data.text), settingsSantize) : data.text;
         if ((text.length <= this.room.prefs.char_limit) && (text.length > 0)) {
             this.room.emit('talk', {
                 guid: this.guid,
