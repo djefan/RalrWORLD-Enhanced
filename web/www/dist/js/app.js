@@ -624,7 +624,7 @@ var Bonzi = (function () {
                         if (!this.mute) {
                             this.$dialog.addClass('bubble_autowidth');
                             function checkurl(){if(vid.includes("?")){return "&"} else {return "?"}};
-                            this.$dialogCont.html(`\n\t\t\t\t\t<iframe type='text/html' width='480' height='270' scrolling='no' frameborder='no' allow='autoplay' \n\t\t\t\t\tsrc='https://www.youtube.com/embed/${vid.replace(/playlist/gi, "videoseries").replace(/(^\w+:|^)\/.*\.youtube\.com\//, '')}${checkurl()}autoplay=1&modestbranding=1&playsinline=0&showinfo=0&enablejsapi=1&origin=${window.location.origin}&widgetid=1&color=purple&theme=dark' \n\t\t\t\t\tstyle='width:480px;height:270px; border-radius: 7px;'\n\t\t\t\t\tframeborder='0'\n\t\t\t\t\allow='autoplay; encrypted-media'\n\t\t\t\t\tallowfullscreen='allowfullscreen'\n\t\t\t\t\tmozallowfullscreen='mozallowfullscreen'\n\t\t\t\t\tmsallowfullscreen='msallowfullscreen'\n\t\t\t\t\toallowfullscreen='oallowfullscreen'\n\t\t\t\t\twebkitallowfullscreen='webkitallowfullscreen'\n\t\t\t\t\t></iframe>\n\t\t\t\t`), this.$dialog.show();
+                            this.$dialogCont.html(`\n\t\t\t\t\t<iframe type='text/html' width='480' height='270' scrolling='no' frameborder='no' allow='autoplay' \n\t\t\t\t\tsrc='https://www.youtube.com/embed/${vid.replace(/playlist/gi, "videoseries").replace(/&t/gi, "&start").replace(/\?t/gi, "?start").replace(/(^\w+:|^)\/.*\.youtube\.com\//, '')}${checkurl()}autoplay=1&modestbranding=1&playsinline=0&showinfo=0&enablejsapi=1&origin=${window.location.origin}&widgetid=1&color=purple&theme=dark' \n\t\t\t\t\tstyle='width:480px;height:270px; border-radius: 7px;'\n\t\t\t\t\tframeborder='0'\n\t\t\t\t\allow='autoplay; encrypted-media'\n\t\t\t\t\tallowfullscreen='allowfullscreen'\n\t\t\t\t\tmozallowfullscreen='mozallowfullscreen'\n\t\t\t\t\tmsallowfullscreen='msallowfullscreen'\n\t\t\t\t\toallowfullscreen='oallowfullscreen'\n\t\t\t\t\twebkitallowfullscreen='webkitallowfullscreen'\n\t\t\t\t\t></iframe>\n\t\t\t\t`), this.$dialog.show();
                         }
                     },
                 },
@@ -1069,19 +1069,24 @@ function s4() {
         .substring(1);
 }
 function youtubeParser(url) {
-	// added support for yt shorts
-    // added support for playlists
-    var match = url.match(/^.*((youtube|youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(shorts\/)|(playlist\?list=)|(watch\?v=))([^#\&\?]*).*/);
-    return !(!match || 11 != match[9].length) && match[9] || !(!match || 34 != match[9].length) && "playlist?list="+match[9];
+	// updated this bullshit
+    var match = url.match(/((https|http):\/\/(?:www\.)?(youtube\.com\/|youtu\.be\/)|(v\/)|(\/u\/\w\/)|((playlist\?list=([a-zA-Z0-9_\-]{34})))|(embed\/)|(shorts\/)|(watch\?v=([a-zA-Z0-9_\-]{11}))|([\?|&]list=([a-zA-Z0-9_\-]{34}))|([\?|&]index=([a-zA-Z0-9_\-]))|([\?|&]t=([a-zA-Z0-9_\-]))|([\?|&]start=([a-zA-Z0-9_\-])))/gm);
+	if (!match) {return};
+	var the_url = (match[1]+match[2]+match[3]).replace(/watch\?v=/gmi, "").replace(/undefined/gmi, "").replace(/\&list/gmi, "?list");
+	var the_url2 = (match[1]+match[3]).replace(/watch\?v=/gmi, "").replace(/undefined/gmi, "");
+    return !(!match || the_url.length != the_url.length) && the_url || !(!match || 11 != the_url.length) && the_url || !(!match || 34 != the_url2.length) && "playlist?list="+the_url2;
 }
-/*function soundcloudParser(url) {
+function soundcloudParser(url) {
     var match = url.match(/^.*(soundcloud\.com|snd\.sc)\/(.*)/);
-    return !(!match || 11 != match[3].length) && match[3];
+	if (!match) {return};
+    return !(!match || match[2].length != match[2].length) && match[0];
 }
 function spotifyParser(url) {
     var match = url.match(/^(.*\.spotify\.com)\/(track|album|playlist)\/(.*)/);
-    return !(!match || 11 != match[4].length) && match[4];
-}*/
+	if (!match) {return};
+	var the_url = match[2]+"/"+match[3].split("?")[0];
+    return !(!match || 28 != the_url.length) && the_url || !(!match || 31 != the_url.split("?")[0].length) && the_url;
+}
 function rtimeOut(callback, delay) {
     var stop,
         dateNow = Date.now,
@@ -1865,10 +1870,10 @@ function sendInput() {
     if (($("#chat_message").val(""), text.length > 0)) {
         var youtube = youtubeParser(text);
         if (youtube) return void socket.emit("command", { list: ["youtube", youtube] });
-        /*var soundcloud = soundcloudParser(text);
+        var soundcloud = soundcloudParser(text);
         if (soundcloud) return void socket.emit("command", { list: ["soundcloud", soundcloud] });
         var spotify = spotifyParser(text);
-        if (spotify) return void socket.emit("command", { list: ["spotify", spotify] });*/
+        if (spotify) return void socket.emit("command", { list: ["spotify", spotify] });
         if ("/" == text.substring(1, 0)) {
             var list = text.substring(1).split(" ");
             socket.emit("command", { list: list });
