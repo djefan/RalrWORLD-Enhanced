@@ -26,8 +26,25 @@ var warnedUserAboutUGC = false;
 
 const date = new Date().toLocaleTimeString();
 function getBonziHEXColor(color) {
-	let hex="#AB47BC";
-	if(color=="purple"){return"#AB47BC"}else if(color=="magenta"){return"#FF00FF"}else if(color=="pink"){return"#F43475"}else if(color=="blue"){return"#3865FF"}else if(color=="cyan"){return"#00ffff"}else if(color=="red"){return"#f44336"}else if(color=="orange"){return"#FF7A05"}else if(color=="green"){return"#4CAF50"}else if(color=="lime"){return"#55FF11"}else if(color=="yellow"){return"#F1E11E"}else if(color=="brown"){return"#CD853F"}else if(color=="black"){return"#424242"}else if(color=="grey"){return"#828282"}else if(color=="white"){return"#EAEAEA"}else if(color=="ghost"){return"#D77BE7"}else{return hex}
+  const colorMap = {
+    purple: 0xAB47BC,
+    magenta: 0xFF00FF,
+    pink: 0xF43475,
+    blue: 0x3865FF,
+    cyan: 0x00ffff,
+    red: 0xf44336,
+    orange: 0xFF7A05,
+    green: 0x4CAF50,
+    lime: 0x55FF11,
+    yellow: 0xF1E11E,
+    brown: 0xCD853F,
+    black: 0x424242,
+    grey: 0x828282,
+    white: 0xEAEAEA,
+    ghost: 0xD77BE7
+  };
+
+  return colorMap[color] || 0xAB47BC;
 }
 
 
@@ -624,7 +641,7 @@ var Bonzi = (function () {
                         if (!this.mute) {
                             this.$dialog.addClass('bubble_autowidth');
                             function checkurl(){if(vid.includes("?")){return "&"} else {return "?"}};
-                            this.$dialogCont.html(`\n\t\t\t\t\t<iframe type='text/html' width='480' height='270' scrolling='no' frameborder='no' allow='autoplay' \n\t\t\t\t\tsrc='https://www.youtube.com/embed/${vid.replace(/playlist/gi, "videoseries").replace(/&t/gi, "&start").replace(/\?t/gi, "?start").replace(/(^\w+:|^)\/.*\.youtube\.com\//, '')}${checkurl()}autoplay=1&modestbranding=1&playsinline=0&showinfo=0&enablejsapi=1&origin=${window.location.origin}&widgetid=1&color=purple&theme=dark' \n\t\t\t\t\tstyle='width:480px;height:270px; border-radius: 7px;'\n\t\t\t\t\tframeborder='0'\n\t\t\t\t\allow='autoplay; encrypted-media'\n\t\t\t\t\tallowfullscreen='allowfullscreen'\n\t\t\t\t\tmozallowfullscreen='mozallowfullscreen'\n\t\t\t\t\tmsallowfullscreen='msallowfullscreen'\n\t\t\t\t\toallowfullscreen='oallowfullscreen'\n\t\t\t\t\twebkitallowfullscreen='webkitallowfullscreen'\n\t\t\t\t\t></iframe>\n\t\t\t\t`), this.$dialog.show();
+                            this.$dialogCont.html(`\n\t\t\t\t\t<iframe type='text/html' width='480' height='270' scrolling='no' frameborder='no' allow='autoplay' \n\t\t\t\t\tsrc='https://www.youtube.com/embed/${vid.replace(/playlist/gi, "videoseries").replace(/&t/gi, "&start").replace(/\?t/gi, "?start").replace(/(^\w+:|^)\/.*\.youtube\.com\//, '')}${checkurl()}autoplay=1&modestbranding=1&playsinline=0&showinfo=0&enablejsapi=1&origin=${window.location.origin}&widgetid=1&color=purple&theme=dark' \n\t\t\t\t\tstyle='width:360px;height:180px; border-radius: 7px;'\n\t\t\t\t\tframeborder='0'\n\t\t\t\t\allow='autoplay; encrypted-media'\n\t\t\t\t\tallowfullscreen='allowfullscreen'\n\t\t\t\t\tmozallowfullscreen='mozallowfullscreen'\n\t\t\t\t\tmsallowfullscreen='msallowfullscreen'\n\t\t\t\t\toallowfullscreen='oallowfullscreen'\n\t\t\t\t\twebkitallowfullscreen='webkitallowfullscreen'\n\t\t\t\t\t></iframe>\n\t\t\t\t`), this.$dialog.show();
                         }
                     },
                 },
@@ -651,7 +668,7 @@ var Bonzi = (function () {
                     value: function (img) {
                         if (!this.mute) {
                             var b = "embed";
-                            this.$dialogCont.html(`<img id='bw_image' width='170' max-height='460' src='${img}'></img>`), this.$dialog.show();
+                            this.$dialogCont.html(`<img id='bw_image' width='180' max-height='460' src='${img}'></img>`), this.$dialog.show();
                         }
                     },
                 },
@@ -661,7 +678,7 @@ var Bonzi = (function () {
                         if (!this.mute) {
                             var b = "embed";
                             this.$dialog.addClass('bubble_autowidth');
-                            this.$dialogCont.html(`<video id='bw_video' style='border-radius: 7px;' controls height='270' autoplay loop><source src='${vid}' type='video/mp4'></video>`), this.$dialog.show();
+                            this.$dialogCont.html(`<video id='bw_video' style='border-radius: 7px;' controls max-width='400' height='180' autoplay loop><source src='${vid}' type='video/mp4'></video>`), this.$dialog.show();
                         }
                     },
                 },
@@ -1377,10 +1394,8 @@ document.addEventListener("contextmenu", (key) => {
 }, false);
 // "disable" devtools.  fuck off bozoworlders!
 $(document).keydown((key) => {
-    if (window.location.hostname.includes("localhost") || enable_skid_protect != true)
-        return;
-    if (window.location.hostname.includes("127.0.0.1") || enable_skid_protect != true)
-        return;
+    if (window.location.hostname.includes("localhost") || enable_skid_protect != true) return;
+    if (window.location.hostname.includes("127.0.0.1") || enable_skid_protect != true) return;
 
     if (key.ctrlKey && key.shiftKey && key.which == 67) { key.preventDefault()}
     if (key.ctrlKey && key.shiftKey && key.which == 73) { key.preventDefault()}
@@ -1393,6 +1408,7 @@ $(document).keydown((key) => {
 	function detectDevTool(allow, data) {
 		if (window.location.hostname.includes("localhost") || enable_skid_protect != true) return;
         if (window.location.hostname.includes("127.0.0.1") || enable_skid_protect != true) return;
+
 		if(isNaN(+allow)) allow = 100;
 		var start = +new Date();
         setInterval(function(){
@@ -1497,17 +1513,26 @@ function Load() {
 	}, 100));
 }
 function login() {
-	if($("#login_name").val().includes("\"") === true) { return $("#page_skiddie").show() && socket.disconnect() && $("#page_error").hide() }
-	if($("#login_name").val().includes("'") === true) { return $("#page_skiddie").show() && socket.disconnect() && $("#page_error").hide() }
-	if($("#login_name").val().includes("&") === true) { return $("#page_skiddie").show() && socket.disconnect() && $("#page_error").hide() }
-	if($("#login_name").val().includes("#") === true) { return $("#page_skiddie").show() && socket.disconnect() && $("#page_error").hide() }
-	Bonzi_Name = $("#login_name").val() || "Anonymous";
-	var login_sfx = new Audio("./sfx/ui/winxp/logon.mp3");
-    setTimeout(function () {socket.emit("login", { name: $("#login_name").val(), room: $("#login_room").val() }), bzSetup()}, 954);
-	if ($("#login_room").val().includes("test")) debug = true;
-	if ($("#login_room").val().includes("debug")) debug = true;
+    const loginName = $("#login_name").val();
+    const loginRoom = $("#login_room").val();
 
-	login_sfx.play();
+    if (loginName.includes("\"") || loginName.includes("'") || loginName.includes("&") || loginName.includes("#")) {
+        $("#page_skiddie").show();
+		socket.disconnect();
+		$("#page_error").hide();
+        return;
+    }
+
+    Bonzi_Name = loginName || "Anonymous";
+    const loginSfx = new Audio("./sfx/ui/winxp/logon.mp3");
+    setTimeout(() => {
+        socket.emit("login", { name: loginName, room: loginRoom });
+        bzSetup();
+    }, 954);
+
+    if (loginRoom.includes("test") || loginRoom.includes("debug")) {debug = true}
+
+    loginSfx.play();
     LoggedIn = true;
 }
 
@@ -1960,13 +1985,13 @@ window.onload = () => {
                 };
             },*/
         },
-        /*events: {
-            show: (opt) => {
-                for (const key in settings) {
-                    opt.inputs[key].selected = settings[key].value;
-                }
-            }
-        }*/
+		/*show: (opt) => {
+			for (const key in settings) {
+				if (opt.inputs && opt.inputs[key]) {
+					opt.inputs[key].selected = settings[key].value;
+				}
+			}
+		}*/
     }),
         $.contextMenu({
             selector: "#page_login",
@@ -1994,14 +2019,15 @@ window.onload = () => {
                     };
                 },*/
             },
-            /*events: {
-                show: (opt) => {
-                    for (const key in settings) {
-                        opt.inputs[key].selected = settings[key].value;
-                    }
-                }
-            }*/
+			/*show: (opt) => {
+				for (const key in settings) {
+					if (opt.inputs && opt.inputs[key]) {
+						opt.inputs[key].selected = settings[key].value;
+					}
+				}
+			}*/
         }),
+
         $.contextMenu({
             selector: "#themes_btn",
             items: {

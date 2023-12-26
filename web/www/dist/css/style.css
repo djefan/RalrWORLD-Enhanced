@@ -1747,6 +1747,7 @@ audio::-webkit-media-controls-time-remaining-display  {
     font-family: "Ubuntu Mono", monospace;
 }
 #chat_log #chat_log_list ul li.bonzi-message span.bonzi-name {
+	font-style: normal !important;
     cursor: pointer;
 }
 #chat_log #chat_log_list ul li.bonzi-message span.bonzi-name .bonzi-name-icon {
@@ -1757,6 +1758,7 @@ audio::-webkit-media-controls-time-remaining-display  {
     margin-right: 3px;
 }
 #chat_log #chat_log_list ul li.bonzi-message span.body {
+	font-style: normal !important;
     word-break: break-all;
 }
 #chat_log #chat_log_list ul li.bonzi-message span.body i {
