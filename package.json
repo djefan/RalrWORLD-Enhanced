@@ -33,6 +33,7 @@
     "javascript-obfuscator": "^4.0.2",
     "mediaserver": "^0.1.1",
     "merge": "^2.1.1",
+    "node-emoji": "^2.1.3",
     "nodemon": "^2.0.20",
     "reload": "^3.2.0",
     "sanitize-html": "^2.3.2",

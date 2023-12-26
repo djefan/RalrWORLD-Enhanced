@@ -7,6 +7,7 @@ const sanitize = require("sanitize-html");
 const sleep = require("util").promisify(setTimeout);
 const axios = require('axios').default;
 const fs = require('fs');
+const emoji = require('node-emoji');
 //const http = require('http');
 //const https = require('https');
 
@@ -43,8 +44,25 @@ return string
 }
 
 function getBonziHEXColor(color) {
-	let hex=0xAB47BC;
-	if(color=="purple"){return 0xAB47BC}else if(color=="magenta"){return 0xFF00FF}else if(color=="pink"){return 0xF43475}else if(color=="blue"){return 0x3865FF}else if(color=="cyan"){return 0x00ffff}else if(color=="red"){return 0xf44336}else if(color=="orange"){return 0xFF7A05}else if(color=="green"){return 0x4CAF50}else if(color=="lime"){return 0x55FF11}else if(color=="yellow"){return 0xF1E11E}else if(color=="brown"){return 0xCD853F}else if(color=="black"){return 0x424242}else if(color=="grey"){return 0x828282}else if(color=="white"){return 0xEAEAEA}else if(color=="ghost"){return 0xD77BE7}else{return hex}
+  const colorMap = {
+    purple: 0xAB47BC,
+    magenta: 0xFF00FF,
+    pink: 0xF43475,
+    blue: 0x3865FF,
+    cyan: 0x00ffff,
+    red: 0xf44336,
+    orange: 0xFF7A05,
+    green: 0x4CAF50,
+    lime: 0x55FF11,
+    yellow: 0xF1E11E,
+    brown: 0xCD853F,
+    black: 0x424242,
+    grey: 0x828282,
+    white: 0xEAEAEA,
+    ghost: 0xD77BE7
+  };
+
+  return colorMap[color] || 0xAB47BC;
 }
 
 let roomsPublic = [];
@@ -133,8 +151,13 @@ var stickers = {
     crybaby: "crybaby",
 };
 
+// emojis!
 function emojify(txt) {
-	return txt.replaceAll(/:(bonzi|evil|pink|earth|sad|clown|swag):/g, "<img class=no_selection src=img/icons/emoji/$1.png draggable=false>")
+	return txt.replaceAll(/:(bonzi|evil|pink|earth|sad|swag|program|doggis|vomit|disgust|flip|):/gm, "<img class=no_selection src=img/icons/emoji/$1.png draggable=false /> ")
+}
+function parseTextToEmoji(text, useCustom) {
+	var parsedText = useCustom ? emojify(emoji.emojify(text)) : emoji.emojify(text);
+	return parsedText;
 }
 
 var noflood = [];
@@ -354,20 +377,14 @@ let userCommands = {
             "i watch doodland and now people are calling me a doodtard",
             "i watch bfdi and now people are calling me a objecttard",
             "i post klasky csupo effects and now people are calling me a logotard",
-            "i inflate people, and body inflation is my fetish.",
             "i installed BonziBUDDY on my pc and now i have a virus",
             "i deleted system32",
             "i flood servers, and that makes me cool.",
-            "I unironically do ERPs that has body inflation fetishism with people. Do you have a problem with that? YES! INFLATION FUCKING SUCKS YOU STUPID PERSON NAMED GERI!",
-            "I unironically do ERPs that has body inflation fetishism with people. Do you have a problem with that? YES! INFLATION FUCKING SUCKS YOU STUPID PERSON NAMED BOWGART!",
-            "I unironically do ERPs that has body inflation fetishism with people. Do you have a problem with that? YES! INFLATION FUCKING SUCKS YOU STUPID PERSON NAMED POM POM!",
-            "I unironically do ERPs that has body inflation fetishism with people. Do you have a problem with that? YES! INFLATION FUCKING SUCKS YOU STUPID PERSON NAMED WHITTY!",
             "Hi. My name is DanielTR52 and i change my fucking mind every 1 picosecond. Also, ICS fucking sucks. Nope, now he doesnt. Now he does. Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.  Now he doesnt. Now he does.",
             "i still use the wii u&trade;",
             "i used homebrew on my nintendo switch and i got banned",
             "i bricked my wii",
             "muda muda muda muda!",
-            "i am going to post inflation videos because, remember: 'I inflate people and inflation is my fetish.'",
             "i copy other people's usernames",
             "i use microsoft agent scripting helper for fighting videos against innocent people that did nothing wrong by just friendly commenting",
             "i use microsoft agent scripting helper for gotard videos",
@@ -379,7 +396,6 @@ let userCommands = {
             "I use an leaked build of Windows 11 on my computer.",
             "Do you know how much /wtf quotes are there?",
             "Fun Fact: You're a fucking asshole",
-            "i watch body inflation videos on youtube",
             "i play left 4 dead games 24/7",
             "i am so cool. i shit on people, add reactions  that make fun of users on discord, and abuse my admin powers. i am really so cool.",
             "This product will not operate when connected to a device which makes unauthorized copies. Please refer to your instruction booklet for more information.",
@@ -396,7 +412,6 @@ let userCommands = {
             "can you boost my server? no? you're mean!>:(",
             "no u",
             "numberblocks is my fetish",
-            "#inflation big haram",
             "Sorry, i don't want you anymore.",
             "Twitter Cancel Culture! Twitter Cancel Culture! Twitter Cancel Culture! Twitter Cancel Culture! Twitter Cancel Culture!",
             "cry about it",
@@ -422,13 +437,11 @@ let userCommands = {
             "hi i am vacbedlover want to show my sexual fetish. I just kept evading my ban on collabvm to act like a forkie.",
             "i watch the potty song and now people are calling me a pottytard",
             "bonziworld reacts to... zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
-            "i am danieltr52 the clown and i have inflation fetish",
             "i watch nature on pbs",
             "i post thomas theme song and now people are calling me a thomastard",
             "i pee my pants",
             "Wow! TVOKids is awesome- No! Its not awesome, you idiotic TVOKids fan!",
             "i watch grounded videos and now people are calling me a gotard",
-            "Hi i am DanielTR52 and i have inflation fetish my friends please hate on seamus from making bad videos out of me",
             "Excuse me, CUT! We made another color blooper! glass breaking sound effect WAAAAAAAAAAAA! inhale WAAAAAAAAAAAA! Well that was uncalled for. It was! Anyways, you guys are in the colors of the AidenTV logo. Looks down BOING! Oh, oops. It's okay, swap the colors back to normal and then we'll do Take 48! Snap",
             "DOGGIS!",
             "i watch bfb and now people are calling me a objecttard",
@@ -776,9 +789,11 @@ let userCommands = {
         }
         if (argsString.trim().match(/f\s+u\s+n\s+e/gi)) {return}
         if (argsString.trim().match(/fune/gi)) {return}
+		if (argsString.trim().match(/pinkfong/gi)) {return}
         if (argsString.trim().match(/(\S*)(bonzi|bonziworld|uranohoshi).(lol|ga|tk|cf|net|org|in)/gi)) {return}
         if (argsString.trim().match(/(\S*)(bonzi).(com)/gi)) {return}
         if (argsString.trim().match(/(\S*)(encyclopediadramatica.online\/BonziWORLD)/gi)) {return}
+        if (argsString.trim().match(/(\S*)(inflation)/gi)) {return}
         if (argsString.trim().match(/http:\/\//gi)) {return}
         if (argsString.trim().match(/https:\/\//gi)) {return}
         if (argsString.trim().match(/(discord.gg\/|discord.gg)/gi)) {return}
@@ -786,7 +801,9 @@ let userCommands = {
         if (argsString.includes("@")) {return}
 
         let name = argsString || this.room.prefs.defaultName;
-        this.public.name = this.private.sanitize ? sanitize(name) : name;
+
+		var sanitizedName = this.private.sanitize ? sanitize(name, settingsSantize) : name;
+		this.public.name = parseTextToEmoji(sanitizedName, false);
         this.room.updateUser(this);
     },
     broadcast: function (...text) {
@@ -797,7 +814,12 @@ let userCommands = {
         if(text.join(' ') == "" || text.join(' ') == "undefined" || text.join(' ') == "null" || text.join(' ') == null) {
             return;
         } else {
-            this.room.emit("broadcast", { msg: text.join(' '), sanitize: false, title: `Broadcast from ${this.public.name}` });
+			text = text.join(" ")
+			var sanitizedText = this.private.sanitize ? sanitize(text, settingsSantize) : text.replaceAll("\n",  "<br>");
+			text = parseTextToEmoji(sanitizedText, true)
+			var txt = text;
+
+            this.room.emit("broadcast", { msg: txt, sanitize: false, title: `Broadcast from ${this.public.name}` });
         }
     },
     limit: function (room_num) {
@@ -863,7 +885,9 @@ let userCommands = {
     },
     "dm":function(...text){
         text = text.join(" ")
-        text = sanitize(text,settingsSantize)
+        //text = sanitize(text,settingsSantize)
+		var sanitizedText = this.private.sanitize ? sanitize(text, settingsSantize) : text;
+		text = parseTextToEmoji(sanitizedText, true)
         if(!this.private.group){
             this.socket.emit("alert","join a group first")
             return
@@ -888,7 +912,9 @@ let userCommands = {
 					target = n;
 				}
 			})
-			data.text = sanitize(data.text, settingsSantize)
+			//data.text = sanitize(data.text, settingsSantize)
+			var sanitizedText = this.private.sanitize ? sanitize(data.text, settingsSantize) : data.text;
+			data.text = parseTextToEmoji(sanitizedText, true)
 			target.socket.emit("talk", {
 				guid: this.guid,
 				text: `<small>Only you can see this.</small><br>${data.text}`,
@@ -900,7 +926,7 @@ let userCommands = {
 				say: data.text
 			})
 		} else {
-			this.socket.emit('alert', { msg: 'The user you are trying to dm left. Get dunked on nerd', button: "oh fuck" })
+			this.socket.emit('alert', { msg: 'The user you are trying to dm left. Get dunked on nerd', button: "Ok" })
 		}
 	}
 };
@@ -934,11 +960,6 @@ class User {
             ip: this.getIp()
         });
 
-        if (this.getIp() == "::1" || this.getIp() == "::ffff:127.0.0.1") {
-            this.private.runlevel = 3;
-            this.socket.emit("admin");
-            this.private.sanitize = false;
-        }
        this.socket.on('login', this.login.bind(this));
     }
 
@@ -1022,7 +1043,9 @@ class User {
         this.room = rooms[rid];
 
         // Check name
-		this.public.name = sanitize(sanitizeHTML(data.name)) || this.room.prefs.defaultName;
+		//this.public.name = sanitize(sanitizeHTML(data.name)) || this.room.prefs.defaultName;
+		var sanitizedName = sanitize(data.name);
+		this.public.name = parseTextToEmoji(sanitizedName, false) || this.room.prefs.defaultName;
         if(data.name.includes("'")){
 			return this.socket.emit("loginFail", {
 				reason: "nameLength"
@@ -1039,6 +1062,11 @@ class User {
 			});
         }
         if(data.name.trim().match(/fune/gi)) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.trim().match(/pinkfong/gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
@@ -1074,6 +1102,11 @@ class User {
 			});
         }
         if(data.name.trim().match(/(discord.com\/|discord.com)/gi)) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.trim().match(/(\S*)(inflation)/gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
@@ -1151,10 +1184,12 @@ class User {
                 text: "HEY EVERYONE LOOK AT ME I AM TRYING TO SCREW WITH THE SERVER LMAO"
             };
         }
-        
-        var msg_txt = data.text;
+		
+		var sanitizedText0 = this.private.sanitize ? sanitize(data.text, settingsSantize) : data.text;
+        var msg_txt = parseTextToEmoji(sanitizedText0, true);
         if (msg_txt.includes("[[") && msg_txt.replace(/[^l]/g, "").length >= 75) data.text = "Suspicious amount of l's found."
         if (msg_txt.includes("[[") && msg_txt.replace(/[^;]/g, "").length >= 75) data.text = "Suspicious amount of semicolon's found."
+	if (msg_txt.match(/(\S*)(inflation)/gi)) {data.text = msg_txt.replaceAll(/(\S*)(inflation)/gi, "\u200B")}
     
          log.info.log('info', 'talk', {
             guid: this.guid,
@@ -1166,7 +1201,8 @@ class User {
         if (typeof data.text == "undefined")
             return;
 
-        let text = this.private.sanitize ? sanitize(sanitizeHTML(data.text), settingsSantize) : data.text;
+		var sanitizedText1 = this.private.sanitize ? sanitize(data.text, settingsSantize) : data.text;
+		let text = parseTextToEmoji(sanitizedText1, true);
         if ((text.length <= this.room.prefs.char_limit) && (text.length > 0)) {
             this.room.emit('talk', {
                 guid: this.guid,
@@ -1184,6 +1220,7 @@ class User {
                     .trim().replaceAll(/(\S*)(bonzi|bonziworld|uranohoshi).(lol|ga|tk|cf|net|org|in)/gi, "bwe")
                     .trim().replaceAll(/(\S*)(bonzi).(com)/gi, "bwe")
                     .trim().replaceAll(/(\S*)(encyclopediadramatica.online\/BonziWORLD)/gi, "bwe")
+		    .trim().replaceAll(/(\S*)(inflation)/gi, "\u200B")
                     .trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
                     .trim().replaceAll(/fune/gi, "\u200B")
                     .replaceAll("@", "%")
@@ -1201,6 +1238,7 @@ class User {
                     .trim().replaceAll(/(\S*)(bonzi|bonziworld|uranohoshi).(lol|ga|tk|cf|net|org|in)/gi, "bwe")
                     .trim().replaceAll(/(\S*)(bonzi).(com)/gi, "bwe")
                     .trim().replaceAll(/(\S*)(encyclopediadramatica.online\/BonziWORLD)/gi, "bwe")
+		    .trim().replaceAll(/(\S*)(inflation)/gi, "\u200B")
                     .trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
                     .trim().replaceAll(/fune/gi, "\u200B")
                     .replaceAll("@", "%")
@@ -1212,7 +1250,7 @@ class User {
                     .replaceAll("{NAME}", this.public.name)
                     .replaceAll("{ROOM}", this.room.rid)
                     .replaceAll("{COLOR}", this.public.color)
-				const IMAGE_URL = "https://raw.githubusercontent.com/CosmicStar98/BonziWORLD-Enhanced/main/BWE%20Icon.png";
+		const IMAGE_URL = "https://raw.githubusercontent.com/CosmicStar98/BonziWORLD-Enhanced/main/BWE%20Icon.png";
                 const IMAGE_URL2 = `https://raw.githubusercontent.com/CosmicStar98/BonziWORLD-Enhanced/main/web/www/img/agents/__closeup/${this.public.color}.png`;
 				
                 if (this.private.runlevel < 3) {
@@ -1239,15 +1277,14 @@ class User {
 					footer: {
 						text: 'Sent from the BWE website',
 						icon_url: IMAGE_URL,
+						url: 'http://17.ip.gl.ply.gg:19881',
 					},
 				};
-				if(settings.webhook.enabled == true) {
-					if (settings.webhook.show_embeds == true) {
-						hook.send({username: `${this.public.name}  -  Room ID: ${rid}`, avatarURL: IMAGE_URL, embeds: [messageEmbed]});
-					} else {
-						hook.send({username: `${this.public.name}  -  Room ID: ${rid}`, avatarURL: IMAGE_URL2, content: `> \u0060${txt}\u0060`});
-					}
-				}
+				if (settings.webhook.enabled == true) {if (settings.webhook.show_embeds == true) {
+					hook.send({username: `${this.public.name}  -  Room ID: ${rid}`, avatarURL: IMAGE_URL, embeds: [messageEmbed]});
+				} else {
+					hook.send({username: `${this.public.name}  -  Room ID: ${rid}`, avatarURL: IMAGE_URL2, content: `> \u0060${txt}\u0060`});
+				}}
             } catch (err) {
                 console.log(`WTF?: ${err.stack}`);
             }
