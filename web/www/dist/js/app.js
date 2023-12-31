@@ -36,7 +36,7 @@ function getBonziHEXColor(color) {
     orange: 0xFF7A05,
     green: 0x4CAF50,
     lime: 0x55FF11,
-    yellow: 0xF1E11E,
+    yellow: 0xE6CB24,
     brown: 0xCD853F,
     black: 0x424242,
     grey: 0x828282,
@@ -44,7 +44,7 @@ function getBonziHEXColor(color) {
     ghost: 0xD77BE7
   };
 
-  return colorMap[color] || 0xAB47BC;
+  return colorMap[color].toString(16) || colorMap['purple'].toString(16);
 }
 
 
