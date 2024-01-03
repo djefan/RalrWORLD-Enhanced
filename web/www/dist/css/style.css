@@ -500,6 +500,24 @@ input[type="text"]  {
 .bubble.bubble_autosize .bubble-content img, .bubble.image .bubble-content img  {
     width: 100%;
 }
+#bw_image {
+    border-radius: 7px;
+    margin-top: 6px;
+    margin-bottom: -2px;
+    padding: 0px !important;
+}
+#bw_audio {
+    border-radius: 7px;
+    margin-top: 6px;
+    margin-bottom: -2px;
+    padding: 0px !important;
+}
+#bw_video {
+    border-radius: 7px;
+    margin-top: 6px;
+    margin-bottom: -2px;
+    padding: 0px !important;
+}
 .bubble.video-yt  {
     min-width: 328px;
     max-width: 500px;
@@ -1779,7 +1797,7 @@ audio::-webkit-media-controls-time-remaining-display  {
 	font-size: 13px;
     font-weight: bold;
     font-style: italic;
-    color: #181818;
+    color: ##bbb;
 }
 /*#chat_log #chat_log_list ul li.bonzi-message.bonzi-event .event-source {
     text-transform: capitalize;
@@ -2183,7 +2201,8 @@ input[type="checkbox"]:hover, input[type="radio"]:hover  {
 }
 .context-menu-input.context-menu-hover  {
     background-color: #8931c4;
-    cursor: default;
+    color: #FFF;
+    cursor: pointer;
 }
 .context-menu-submenu:after  {
     content: '';
