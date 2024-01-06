@@ -1,25 +1,17 @@
 const log = require('./log.js').log;
 const fs = require('fs-extra');
-const settings = require(`${__dirname}/json/settings.json`);
-const io = require('./server.js').io;
+const settings = require('../json/settings.json');
+const io = require('../server.js').io;
 const sanitize = require('sanitize-html');
 
 const { EmbedBuilder, WebhookClient } = require('discord.js');
-const reports_hook = new WebhookClient({url: "https://discord.com/api/webhooks/1085690050383187980/P4Pc1EqZzYUK1-t3AI7eU9bZRm8Q9ownQeZAPIVf9yPDDFj5veSu3yXqtnJiofT8OiNl"});
-const admx_hook = new WebhookClient({url: "https://discord.com/api/webhooks/1085690409004572763/VVVjdn9DdXd7QT6twBDckARL3KwPnF8-8ZTTkoZ7M6Y8BlRyK9mnbV0t3-HJ84SSwky6"});
+const reports_hook = new WebhookClient({url: settings.sv.discord.urls.reports});
+const admx_hook = new WebhookClient({url: settings.sv.discord.urls.admin});
 
 
 let bans;
 let mutes;
-let logins;
-let accounts;
-let rooms;
-var rooms_table = [];
 
-process.on("uncaughtException", (err) => {
-	console.log(err.stack);
-	throw err;
-});
 
 function replace_crap(string) {
 return string
@@ -38,23 +30,21 @@ return string
 }
 
 
-exports.rooms = rooms;
-exports.rooms_table = rooms_table;
 exports.init = () => {
-	fs.writeFile(`${__dirname}/json/bans.json`, "{}", { flag: 'wx' }, (err) => {
+	fs.writeFile('../json/bans.json', "{}", { flag: 'wx' }, (err) => {
 		if (!err)
 			console.log("Created empty bans list.");
 		try {
-			bans = require(`${__dirname}/json/bans.json`);
+			bans = require('../json/bans.json');
 		} catch (e) {
 			throw "Could not load bans.json. Check syntax and permissions.";
 		}
 	});
-	fs.writeFile(`${__dirname}/json/mutes.json`, "{}", { flag: 'wx' }, (err) => {
+	fs.writeFile('../json/mutes.json', "{}", { flag: 'wx' }, (err) => {
 		if (!err)
 			console.log("Created empty mutes list.");
 		try {
-			mutes = require(`${__dirname}/json/mutes.json`);
+			mutes = require('../json/mutes.json');
 		} catch (e) {
 			throw "Could not load mutes.json. Check syntax and permissions.";
 		}
@@ -63,10 +53,10 @@ exports.init = () => {
 
 exports.saveBans = () => {
 	fs.writeFile(
-		`${__dirname}/json/bans.json`,
+		'../json/bans.json',
 		JSON.stringify(bans),
 		{ flag: 'w' },
-		function (error) {
+		(error) => {
 			log.info.log('info', 'banSave', {
 				error: error
 			});
@@ -76,17 +66,17 @@ exports.saveBans = () => {
 
 exports.saveReport = () => {
 	fs.writeFile(
-		`${__dirname}/json/reports.json`,
+		'../json/reports.json',
 		JSON.stringify(reports)
 	);
 };
 
 exports.saveMutes = () => {
 	fs.writeFile(
-		`${__dirname}/json/mutes.json`,
+		'../json/mutes.json',
 		JSON.stringify(mutes),
 		{ flag: 'w' },
-		function (error) {
+		(error) => {
 			log.info.log('info', 'banSave', {
 				error: error
 			});
@@ -129,10 +119,6 @@ exports.removeMute = (ip) => {
 	delete mutes[ip];
 	exports.saveMutes();
 };
-exports.removeLogin = (ip) => {
-	delete logins[ip];
-	exports.saveLogins();
-};
 
 exports.handleReport = (name) => {
 	var ip = name;
@@ -163,12 +149,14 @@ exports.handleReport = (name) => {
 	var reason = replace_crap(reports[ip].reason);
 	var reporter = replace_crap(reports[ip].reporter);
 	var rid = replace_crap(reports[ip].rid);
+	var acronym = settings.sv.info.identifier;
 
-	const IMAGE_URL = "https://raw.githubusercontent.com/CosmicStar98/BonziWORLD-Enhanced/main/BWE%20Icon.png";
+
+	const IMAGE_URL = settings.sv.discord.icons.default;
 	const reportEmbed = {
 		color: 0xCF14B0,
 		author: {
-			name: `BonziWORLD: Enhanced | Ver ${settings.version}`,
+			name: `${settings.sv.info.name} | v${settings.sv.info.ver}`,
 			icon_url: IMAGE_URL,
 			url: 'https://github.com/CosmicStar98/BonziWORLD-Enhanced',
 		},
@@ -196,17 +184,19 @@ exports.handleReport = (name) => {
 		],
 		timestamp: new Date().toISOString(),
 		footer: {
-			text: 'Sent from the BWE website',
+			text: `Sent from the ${acronym.toUpperCase()} website.`,
 			icon_url: IMAGE_URL,
 		},
 	};
 
-	if(settings.webhook.enabled == true) {
-		if (settings.webhoook.show_embeds == true) {
+	try {
+		if (settings.sv.discord.enabled == true) {if (settings.sv.discord.show_embeds == true) {
 			reports_hook.send({username: `${reporter}  -  New Report!`, avatarURL: IMAGE_URL, embeds: [reportEmbed]});
 		} else {
 			reports_hook.send({username: `${reporter}  -  New Report!`, avatarURL: IMAGE_URL, content: `> \u0060\n**Who: **${username}\n**Room ID: **${rid}\n**Reason: **${reason}.\n**Reporter: **${reporter}\u0060`});
-		}
+		}}
+	} catch (err) {
+		console.log(`WTF?: ${err.stack}`);
 	}
 	console.log(`!!REPORT!!\nWho: ${username}\nRoom ID: ${rid}\nReason: ${reason}.\nReporter: ${reporter}`);
 	return true;

@@ -1,19 +1,7 @@
-// ===================================================================================
-//	Server Environment Handler.
-//	Options: development, production (anything else will use production)
-var server_env = "development";
-// ===================================================================================
-
-
-
-// Account stuff
-const bodyparser = require("body-parser");
-const cookieParser = require("cookie-parser");
-
 // Filesystem reading functions
-const fs = require("fs-extra", "fs");
-
+const fs = require('fs-extra', 'fs');
 const path = require('path');
+
 
 
 // Load settings
@@ -42,23 +30,16 @@ const settings = require(`${__dirname}/json/settings.json`);
 // Setup basic express server
 var express = require("express");
 var app = express();
-if (settings.express.serveStatic) app.use(express.static(`${__dirname}/web/www`));
-app.use(bodyparser.urlencoded({ extended: false }));
-app.use(bodyparser.json());
-app.use(cookieParser());
+if (settings.sv.express.serveStatic) app.use(express.static(`${__dirname}/web/www`));
+
 app.get('/readme.html', (req, res) => {
   res.sendFile(`${__dirname}/web/www/readme/index.html`);
 });
 app.get('/rules.html', (req, res) => {
   res.sendFile(`${__dirname}/web/www/rules/index.html`);
 });
-app.get('/discord.html', (req, res) => {
-  res.sendFile(`${__dirname}/web/www/discord/index.html`);
-});
-app.get('/arcade.html', (req, res) => {
-  res.sendFile(`${__dirname}/web/www/arcade/index.html`);
-});
 var server = require("http").createServer(app);
+
 
 // Init socket.io
 var io = require('socket.io')(server);
@@ -66,12 +47,12 @@ io.set("transports", ["websocket"]);
 
 
 // Variable for toggling Replit mode
-const isReplit = settings.isReplit;
+const isReplit = settings.sv.info.isReplit;
 
 if (isReplit === true) {
 	var port = 80;
 } else {
-	var port = process.env.port || settings.port;
+	var port = process.env.port || settings.sv.express.port;
 }
 exports.io = io;
 
@@ -80,36 +61,24 @@ exports.io = io;
 var sanitize = require("sanitize-html");
 
 // Init winston loggers (hi there)
-const Log = require("./log.js");
+const Log = require("./svnet/log.js");
 Log.init();
 const log = Log.log;
 
-// Load ban list
-const Ban = require("./ban.js");
-Ban.init();
+
+// Load punishment data (bans, mutes, shadows, warns, user reports, etc.)
+const pData = require("./svnet/punish.js");
+pData.init();
 
 // Start actually listening
 server.listen(port, function() {
-  console.log(" Welcome to BonziWORLD Enhanced!!\n", `HTTP Express Server listening on port ${port}\n`, "=+.----------------*-<|{ Logs }|>-*----------------.+=\n");
+  console.log(` Welcome to ${settings.sv.info.name}!!\n`, `HTTP Express Server listening on port ${port}\n`, "=+.----------------*-<|{ Logs }|>-*----------------.+=\n");
 });
 app.use(express.static(`${__dirname}/public`));
 
-// ========================================================================
-// Helper functions
-// ========================================================================
-
-const Utils = require("./utils.js");
-
-// ========================================================================
-// The Beef(TM)
-// ========================================================================
-
-const Meat = require("./meat.js");
-Meat.beat();
-
-// ========================================================================
-// Console commands
-// ========================================================================
-
-const Console = require("./console.js");
+// Load the BonziWORLD libs
+const Utils = require("./svnet/utils.js");
+const Main = require("./svnet/main.js");
+Main.exec();
+const Console = require("./svnet/console.js");
 Console.listen();

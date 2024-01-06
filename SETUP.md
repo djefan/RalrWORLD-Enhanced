@@ -1,7 +1,7 @@
 # BWE Setup Instructions
 
 ### Requirements
-- NodeJS v19 or later
+- NodeJS v18 or later
 - Latest release of npm
 
 #### Requirements (optional)

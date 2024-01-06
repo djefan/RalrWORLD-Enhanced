@@ -19761,10 +19761,10 @@ else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
   }
   if (typeof console !== 'undefined') {
     Module['print'] = function print(x) {
-      console.log(x);
+      //console.log(x);
     };
     Module['printErr'] = function printErr(x) {
-      console.log(x);
+      //console.log(x);
     };
   } else {
     // Probably a worker, and without console.log. We can do very little here...
@@ -65954,7 +65954,7 @@ var shouldRunNow = true;
     this['text']
   ];
   run();
-  console.log(FS.root.contents['wav.wav']);
+  //console.log(FS.root.contents['wav.wav']);
   this['ret'] = unsignedStream(FS.root.contents['wav.wav'].contents);
   }).call(self);
   return self.ret;

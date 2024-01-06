@@ -596,25 +596,25 @@ input[type="text"]  {
     font-size: 12px;
     color: #000;
 }
-.bonzi_user .name-inner  {
+.bonzi_user .user-inner  {
     position: relative;
     display: flex;
 }
-.bonzi_user .name-inner .icon  {
+.bonzi_user .user-inner .icon  {
     vertical-align: middle;
 }
-.bonzi_user .name-inner .icon i  {
+.bonzi_user .user-inner .icon i  {
     vertical-align: middle;
     margin-right: 2px;
     transition: all 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
-.bonzi_user .name-inner .icon i.fa-gavel  {
+.bonzi_user .user-inner .icon i.fa-gavel  {
     color: #c0392b;
 }
-.bonzi_user .name-inner .icon i.fa-gavel:hover, .bonzi_user .name-inner .icon i.fa-gavel:active  {
+.bonzi_user .user-inner .icon i.fa-gavel:hover, .bonzi_user .user-inner .icon i.fa-gavel:active  {
     color: #e74c3c;
 }
-.bonzi_user .name-inner .name  {
+.bonzi_user .user-inner .name  {
     vertical-align: middle;
 }
 .bubble_greentext  {

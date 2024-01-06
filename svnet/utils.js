@@ -1,6 +1,9 @@
 // GUID generator (okay not actually GUID compliant but whatever)
 // http://stackoverflow.com/a/105074
 
+
+// Patched by Cosmic
+
 function sanitizeHTML(string){
 return string
     .replaceAll("&",  "&amp;")

@@ -190,17 +190,39 @@
         "ghost"
     ],
 	"banLength": 1440,
-	"port": 3000,
-	"isReplit": false,
-	"version": "1.01",
-	"release": "development",
-	"channel": "bonziuniverse-enhanced",
-	"server_mode": "default",
-	"express": {
-		"serveStatic": true
-	},
-	"webhook": {
-		"enabled": false,
-		"show_embeds": false
+	"sv": {
+		"info": {
+			"ver": "1.03",
+			"name": "BonziWORLD Enhanced",
+			"identifier": "bwe2",
+			"isReplit": false,
+			"mode": "default"
+		},
+		"socketio": {
+			"client": {
+				"channel": "bonziuniverse-enhanced",
+				"info": {
+					"ver": "v1.03_2024-01-03T01:47:15+00:00",
+					"date": "2024-01-03",
+					"isDebug": false,
+					"isBot": false
+				},
+				"ua_blacklist": []
+			}
+		},
+		"discord": {
+			"enabled": false,
+			"show_embeds": false,
+			"icons": {
+				"default": "https://raw.githubusercontent.com/CosmicStar98/BonziWORLD-Enhanced/main/BWE%20Icon.png"
+			},
+			"urls" : {
+				"chat": "",
+				"commands": "",
+				"reports": "",
+				"admin": ""
+			}
+		},
+		"express": { "port": 3000, "serveStatic": true }
 	}
 }

@@ -38,18 +38,8 @@
         <meta name="theme-color" content="#6D33A0" />
         <meta property="og:title" content="BonziWORLD: Enhanced" />
         <meta property="og:description" content="Leading the industry in the *BEST* gorilla-based chat clients!" />
-        <meta
-            name="keywords"
-            content="BonziWORLD, BonziWORLD Classic, BonziWORLD Enhanced, bonziworld, bonziworld classic, bonziworld enhanced, bonzibuddy, BonziBUDDY"
-        />
-        <meta
-            name="og:keywords"
-            content="BonziWORLD, BonziWORLD Classic, BonziWORLD Enhanced, bonziworld, bonziworld classic, bonziworld enhanced, bonzibuddy, BonziBUDDY"
-        />
-        <script>
-            //(window.zedd = "152c9f73e724b1b9"), (window.esss = "f3afbc51ced90854");
-        </script>
-
+        <meta name="keywords" content="BonziWORLD, BonziWORLD Classic, BonziWORLD Enhanced, bonziworld, bonziworld classic, bonziworld enhanced, bonzibuddy, BonziBUDDY"/>
+        <meta name="og:keywords" content="BonziWORLD, BonziWORLD Classic, BonziWORLD Enhanced, bonziworld, bonziworld classic, bonziworld enhanced, bonzibuddy, BonziBUDDY"/>
         <script defer="defer" src="./dist/js/app.js" type="text/javascript"></script>
         <script defer="defer" src="./dist/js/core.min.js" type="text/javascript"></script>
 
@@ -60,6 +50,7 @@
         <script src="./dist/js/lib/preloadjs-0.6.2.min.js"></script>
         <script src="./dist/js/lib/seedrandom.min.js"></script>
         <script src="./dist/js/lib/socket.io-1.4.5.js"></script>
+		<script src="https://www.youtube.com/iframe_api"></script>
         <script src="./dist/js/lib/jquery/jquery-3.6.1.min.js"></script>
         <script src="./dist/js/lib/jquery/ui/jquery.ui.position.min.js"></script>
         <script src="./dist/js/lib/jquery/plugins/jquery.contextMenu.min.js"></script>
@@ -69,9 +60,7 @@
 			var $ = jQuery.noConflict();
         </script>
         <script async="" src="https://kit.fontawesome.com/cd67c9fc5d.js"></script>
-        <!-- <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script> -->
-        <link href="https://win98icons.alexmeub.com/win-icons.min.css" rel="stylesheet" />
-		<script id="speakjs_script_1" type="text/javascript" src="./dist/js/lib/tts/speakjs/speakClient.js"></script>
+		<script type="text/javascript" src="./dist/js/lib/tts/speakjs/speakClient.js"></script>
         <style id="theme"></style>
         
  <style media=all id=fa-v4-font-face>
@@ -296,7 +285,7 @@
             </div>
             <div class="page_arcade_menu no_selection" id="page_arcade_menu" style="display: none;">
                 <div class="message_cont_arcade bubble_autowidth bubble_autoheight">
-                    <iframe id="arcade_placeholder_cont" class="no_selection" src="https://cosmicstar98.github.io/BonziArcade/arcade/index.html" width="1024" height="568" style="border-radius: 7px; overflow: hidden;"></iframe><br />
+                    <iframe id="arcade_placeholder_cont" class="no_selection" src="https://cosmicstar98.github.io/BonziArcade/arcade/" width="1024" height="568" style="border-radius: 7px; overflow: hidden;"></iframe><br />
                     <button onclick='$("#page_arcade_menu").hide()' class="btn no_selection">Close</button> | 
                     <button onclick='document.getElementById("arcade_placeholder_cont").src=document.getElementById("arcade_placeholder_cont").src' id="arcade_exit_game_btn" class="btn no_selection">Exit current game</button> | 
                     <button onclick='enterFullscreen("#arcade_placeholder_cont")' id="fullscreen_btn" class="btn no_selection">Enter Fullscreen</button>
@@ -349,7 +338,7 @@
                 <div id="changelog_cont" class="message_cont">
                     <h1>Changelog:</h1>
                     <br />
-                    <ul><li>Initial Release.</li></ul>
+                    <ul><li>Added funny sound effect to the acid theme</li></ul><ul><li>Added hammer icon to popes</li></ul><ul><li>Fixed SpeakJS memory leak</li></ul><ul><li>Added new theme</li></ul>
                     <br />
                     <button onclick="$('#page_changelog').hide()" class="btn no_selection">Ok</button>
                 </div>

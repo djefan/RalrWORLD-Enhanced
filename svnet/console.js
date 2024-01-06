@@ -1,5 +1,5 @@
-const Ban = require('./ban.js');
-const io = require('./server.js').io;
+const pData = require('./punish.js');
+const io = require('../server.js').io;
 
 
 let commands = {
@@ -15,7 +15,7 @@ let commands = {
 
             if (reason.trim() == "") reason = "Being retarded? IDK. The fucker that banned you didn't specify.";
 
-            Ban.addBan(ip, length, reason);
+            pData.addBan(ip, length, reason);
             console.log(`ban: ${ip},${length},${reason}`);
         }
     },
@@ -26,7 +26,7 @@ let commands = {
 				return console.log(this.help);
 			
             let ip = args[0];
-            Ban.removeBan(ip);
+            pData.removeBan(ip);
             console.log(`unban: ${ip}`);
         }
     },
@@ -40,7 +40,7 @@ let commands = {
             let length = args[1];
             let reason = args.slice(2).join(" ");
 
-            Ban.mute(ip, length, reason);
+            pData.mute(ip, length, reason);
             console.log(`mute: ${ip},${length},${reason}`);
         }
     },
@@ -51,7 +51,7 @@ let commands = {
 				return console.log(this.help);
 			
             let ip = args[0];
-            Ban.removeMute(ip);
+            pData.removeMute(ip);
             console.log(`unmute: ${ip}`);
         }
     },
@@ -62,7 +62,7 @@ let commands = {
             let ip = args[0];
             let reason = args.slice(2).join(" ");
 
-            Ban.warning(ip, reason);
+            pData.warning(ip, reason);
             console.log(`warning to: ${ip},${reason}`);
         }
     },
@@ -77,7 +77,7 @@ let commands = {
 
             if (reason.trim() == "") reason = "Being retarded? IDK. The fucker that kicked you didn't specify.";
 
-            Ban.kick(ip, reason);
+            pData.kick(ip, reason);
             console.log(`kick: ${ip},${reason}`);
         }
     },
@@ -88,7 +88,7 @@ let commands = {
             let ip = args[0];
             let reason = args.slice(2).join(" ");
 
-            Ban.addReport(ip, reason);
+            pData.addReport(ip, reason);
             console.log(`report to: ${ip},${reason}`);
         }
     },
