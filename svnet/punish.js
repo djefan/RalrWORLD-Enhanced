@@ -5,8 +5,10 @@ const io = require('../server.js').io;
 const sanitize = require('sanitize-html');
 
 const { EmbedBuilder, WebhookClient } = require('discord.js');
-const reports_hook = new WebhookClient({url: settings.sv.discord.urls.reports});
-const admx_hook = new WebhookClient({url: settings.sv.discord.urls.admin});
+try {
+	const reports_hook = new WebhookClient({url: settings.sv.discord.urls.reports});
+	const admx_hook = new WebhookClient({url: settings.sv.discord.urls.admin});
+} catch (e){};
 
 
 let bans;

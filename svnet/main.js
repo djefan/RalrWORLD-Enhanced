@@ -123,7 +123,9 @@ var settingsSantize = {
 
 const { join } = require("path");
 const { EmbedBuilder, WebhookClient } = require('discord.js');
-
+try {
+const chat_hook = new WebhookClient({url: settings.sv.discord.urls.chat});
+} catch (e){};
 
 function getTimeLeft(timeout) {
     return Math.ceil((timeout._idleStart + timeout._idleTimeout - Date.now()) / 1000);
