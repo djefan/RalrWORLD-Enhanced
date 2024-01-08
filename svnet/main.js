@@ -8,7 +8,7 @@ const fs = require('fs');
 
 
 // Variable for toggling Replit mode
-const isReplit = settings.isReplit;
+const isReplit = settings.sv.info.isReplit;
 
 if (isReplit === true) {
 	var port = 80;
