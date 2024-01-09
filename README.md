@@ -25,6 +25,7 @@ Some changes which make this stand out from the standard code by [heyjoeway](htt
 - A handful of new emotes
 - Pre-configured custom themes
 - Decent Youtube and link XSS bug fixes
+- Updated dependencies
 <br><br>
 
 
