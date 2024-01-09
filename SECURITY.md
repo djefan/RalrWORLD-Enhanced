@@ -9,12 +9,13 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| bwe2/cobalt 1.x.x   | :white_check_mark: |
+| bwe > 1.02   | :white_check_mark: |
+| bwe < 1.02   | ☑️ |
 | old licensed builds of bwe   | :x:                |
-| bwr <=1.12.1   | :x:                |
-| bwr >1.12.1   | :x:                |
+| bwr   | :x:                |
+| bwce   | :x:                |
 
 
 ## Reporting a Vulnerability
 
-Literally just make a new issue and i'll look at it later.
+Literally just make a new [issue](https://github.com/CosmicStar98/BonziWORLD-Enhanced/issues/new/choose) and i'll look at it later.
