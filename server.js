@@ -38,12 +38,16 @@ app.get('/readme.html', (req, res) => {
 app.get('/rules.html', (req, res) => {
   res.sendFile(`${__dirname}/web/www/rules/index.html`);
 });
+
 var server = require("http").createServer(app);
 
 
 // Init socket.io
-var io = require('socket.io')(server);
-io.set("transports", ["websocket"]);
+var io = require('socket.io')(server, {
+	allowEIO3: false, allowEIO2: false, allowEIO1: false,
+	maxHttpBufferSize: 8389000,
+	transports: ["websocket"],
+});
 
 
 // Variable for toggling Replit mode
