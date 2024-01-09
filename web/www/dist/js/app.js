@@ -1,6 +1,6 @@
 /*!
   * Application : bonziworld-enhanced
-  * Version     : v1.03_2024-01-03T01:47:15+00:00  |  based off of v3.4.61_7700a6b_2021-11-03T17:30:42+00:00
+  * Version     : v1.04_2024-01-09T18:03:22+00:00  |  based off of v3.4.61_7700a6b_2021-11-03T17:30:42+00:00
   * Built       : 2024-01-03
   * Environment : production-web
 !*/
@@ -14,7 +14,6 @@ let typingTimeout;
 let typing = false;
 let admin = false;
 let autosave = true;
-window.gain = 1;
 var usersAmt = 0;
 var enable_skid_protect = true;
 var LoggedIn = false;
@@ -172,6 +171,97 @@ function ttsFixer(speech) {
         speech = speech.replace(pattern, replacement);
     }
     return speech;
+}
+
+
+// The BONZI™ console logger
+class Logger {
+	constructor() {
+		this.logLevels = {
+			INFO: { fancy_name: "Info", style: { bold: "color: #EF82E5; font-weight: bold;", reg: "color: #EF82E5;" } },
+			WARNING: { fancy_name: "Warn", style: { bold: "color: #E9E257; font-weight: bold;", reg: "color: #E9E257;" } },
+			ERROR: { fancy_name: "Err", style: { bold: "color: #F06868; font-weight: bold;", reg: "color: #F06868;" } },
+		};
+	}
+	
+	log(level, message) {
+		const logStyle = this.logLevels[level]?.style || "";
+		console.log(`%c[BONZI-${this.logLevels[level]?.fancy_name}]: %c${message}`, logStyle.bold, logStyle.reg, "");
+	}
+	info(message) {
+		this.log("INFO", message);
+	}
+	warn(message) {
+		this.log("WARNING", message);
+	}
+	error(message) {
+		this.log("ERROR", message);
+	}
+}
+
+// The BONZI™ chat logger
+class ChatLogger {
+    constructor(logListId) {
+        this.logList = document.getElementById(logListId);
+    }
+
+    add_msg(text, data) {
+        const messageElement = document.createElement("li");
+        messageElement.classList.add("bonzi-message", "cl-msg", "ng-scope", "bonzi-event");
+        messageElement.id = `cl-msg-${data.id}`;
+
+        const timestampElement = document.createElement("span");
+        timestampElement.classList.add("timestamp", "ng-binding");
+        const timestampText = document.createElement("small");
+        timestampText.style.fontSize = "11px";
+        timestampText.style.fontWeight = "normal";
+        timestampText.textContent = new Date().toLocaleTimeString();
+        timestampElement.appendChild(timestampText);
+
+        const sepElement = document.createElement("span");
+        sepElement.classList.add("sep", "tn-sep");
+        sepElement.textContent = " | ";
+
+        const nameElement = document.createElement("span");
+        nameElement.classList.add("bonzi-name", "ng-isolate-scope");
+        const sourceElement = document.createElement("span");
+        sourceElement.classList.add("event-source", "ng-binding", "ng-scope");
+		if(admin) {
+			sourceElement.innerHTML = `<font color='${getBonziHEXColor(data.color)}'><i class='fas fa-check-circle bzw-admin-icon' alt='Admin' title='Admin'></i></font><font color='${getBonziHEXColor(data.color)}'> ${data.name}</font>`;
+		} else {
+			sourceElement.innerHTML = `<font color='${getBonziHEXColor(data.color)}'>${data.name}</font>`;
+		};
+        nameElement.appendChild(sourceElement);
+
+        const bnSepElement = document.createElement("span");
+        bnSepElement.classList.add("sep", "bn-sep");
+        bnSepElement.textContent = ": ";
+
+        const bodyElement = document.createElement("span");
+        bodyElement.classList.add("body", "ng-binding", "ng-scope");
+        bodyElement.style.color = "#dcdcdc";
+        bodyElement.textContent = text;
+
+        messageElement.appendChild(timestampElement);
+        messageElement.appendChild(sepElement);
+        messageElement.appendChild(nameElement);
+        messageElement.appendChild(bnSepElement);
+        messageElement.appendChild(bodyElement);
+
+        const ulElement = document.createElement("ul");
+        ulElement.appendChild(messageElement);
+
+        this.logList.appendChild(ulElement);
+
+        this.scrollToBottom();
+    }
+
+    scrollToBottom() {
+        const shouldScroll = this.logList.scrollHeight - this.logList.scrollTop < 605;
+        if (shouldScroll) {
+            this.logList.scrollTop = this.logList.scrollHeight;
+        }
+    }
 }
 
 
@@ -603,9 +693,10 @@ var Bonzi = (function () {
 							
 							if (!this.mute) {
 						    if(settings.notifications.value === true && LoggedIn === true) {try {new Notification("Room ID: " + Room_ID, { body: new Date().toLocaleTimeString() + " | " + this.userPublic.name + ": " + text, icon: "./img/agents/__closeup/" + this.userPublic.color + ".png" })} catch {}};
-						    var toscroll = document.getElementById("chat_log_list").scrollHeight - document.getElementById("chat_log_list").scrollTop < 605;
+						    /*var toscroll = document.getElementById("chat_log_list").scrollHeight - document.getElementById("chat_log_list").scrollTop < 605;
 							document.getElementById("chat_log_list").innerHTML += `<ul><li class="bonzi-message cl-msg ng-scope bonzi-event" id="cl-msg-${self.id}"><span class="timestamp ng-binding"><small style="font-size:11px;font-weight:normal;\">${new Date().toLocaleTimeString()}</small></span> <span class="sep tn-sep"> | </span><span class="bonzi-name ng-isolate-scope"><span class="event-source ng-binding ng-scope"><font color='${getBonziHEXColor(this.userPublic.color)}'>${this.userPublic.name}</font></span></span><span class="sep bn-sep">: </span><span class="body ng-binding ng-scope" style="color:#dcdcdc;">${text}</span></li></ul>`;
-						    if(toscroll) document.getElementById("chat_log_list").scrollTop = document.getElementById("chat_log_list").scrollHeight};
+						    if(toscroll) document.getElementById("chat_log_list").scrollTop = document.getElementById("chat_log_list").scrollHeight;*/
+							new ChatLogger('chat_log_list').add_msg(text, { id: self.id, name: this.userPublic.name, color: this.userPublic.color })};
 
                             
 							this.$dialogCont[allowHtml ? "html" : "text"](text)[greentext ? "addClass" : "removeClass"]("bubble_greentext").removeClass("bubble_autowidth").removeClass("bubble_media_player").css("display", "block"),
@@ -643,6 +734,7 @@ var Bonzi = (function () {
                     key: "exit",
                     value: function (callback) {
                         this.runSingleEvent([{ type: "anim", anim: "surf_away", ticks: 30 }]), setTimeout(callback, 2e3);
+						new Logger().info(`Leaving room "${Room_ID}"`);
                     },
                 },
                 {
@@ -1528,22 +1620,23 @@ function bonziBroadcast(obj){
 
 var server_io = `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
 var socket = io(server_io, {
-    query: {
-		version: "1.03",
-		ver: "v1.03_2024-01-03T01:47:15+00:00",
-		build_date: "2024-01-03",
+    auth: {
+        version: "1.04",
+        ver: "v1.04_2024-01-09T18:03:22+00:00",
+        build_date: "2024-01-09",
         channel: "bonziuniverse-enhanced",
-		release: "production-web",
-		cfg_cl: {
-			isDebug: false,
-			isBot: false,
-		},
+        release: "production-web",
+        cfg_cl: {
+            isDebug: false,
+            isBot: false,
+        },
         lang: (window.navigator && window.navigator.language && window.navigator.language.slice(0, 2)) || "en"
-    }, transports: ['websocket']
-}),
+    },
+    transports: ['websocket']
+});
     usersPublic = {},
     bonzis = {},
-    debug = !0;
+    debug = 0;
 function Load() {
 	$("#login_card").hide(),
 	$("#login_error").hide(),
@@ -1603,12 +1696,12 @@ function bzSetup() {
 		socket.on("room", function (data) {
             var sfx = new Audio("./sfx/ui/winxp/startup.mp3");
             sfx.play();
-
 			$("#room_owner")[data.isOwner ? "show" : "hide"](),
 			$("#room_public")[data.isPublic ? "show" : "hide"](),
 			$("#room_private")[data.isPublic ? "hide" : "show"](),
 			$(".room_id").text(data.room);
             Room_ID = data.room;
+			new Logger().info(`Joining room "${data.room}"`);
 			// Room MOTDs
 			var toscroll = document.getElementById("chat_log_list").scrollHeight - document.getElementById("chat_log_list").scrollTop < 605;
 			document.getElementById("chat_log_list").innerHTML = `<ul><li class="bonzi-message cl-msg ng-scope bonzi-event no_selection" id="cl-msg-hzj2eadymcqy4t2ksq6w54mf"><span class="timestamp ng-binding"></span><span class="sep tn-sep"></span><span class="bonzi-name ng-isolate-scope" data-ng-style="message.style" bonzi-text-name="message"><span class="event-source ng-binding ng-scope" style="font-size:14px">${data.motd}<br></span></span></li></ul>`;
@@ -1736,7 +1829,7 @@ function bzSetup() {
 		socket.on("broadcast", (data) => {bonziBroadcast(data)}),
 		socket.on("admin", () => {
 			admin = true;
-			$(`#bonzi_${Bonzi_ID} > .bonzi_user > .user-inner > .icon`).html("<i class='fas fa-gavel' title='Administrator' />");
+			$(`#bonzi_${Bonzi_ID} > .bonzi_user > .user-inner > .icon`).html("<i class='fas fa-gavel' alt='Administrator' title='Administrator' />");
 		}),
 		socket.on("typing", (data) => {
             if (!settings.typing.value)
@@ -1881,7 +1974,7 @@ $(() => {
         $("#login_card").show(),
             $("#login_load").hide(),
             $("#login_error").show().text(`Error: ${errorText[data.reason] || "unknown"} (${data.reason})`);
-            console.error(`[BONZI-Err]:  (Cause: ${data.reason})\n${errorText[data.reason]}`);
+			new Logger().error(`(Cause: ${data.reason})\n${errorText[data.reason]}`);
     }),
     socket.on("commandFail", (data) => {
         var errorText = {
@@ -1891,7 +1984,7 @@ $(() => {
             "cooldown": "You're on cooldown, please do not spam commands!",
             "notexist": "That command doesn't exist!"
         };
-        console.error(`[BONZI-Err]:  (Cause: ${data.reason})\n${errorText[data.reason]}`);
+		new Logger().error(`(Cause: ${data.reason})\n${errorText[data.reason]}`);
     }),
     socket.on("disconnect", (data) => {errorFatal()});
     socket.on("restarting", () => {errorReboot()});
@@ -2116,15 +2209,5 @@ $(document).ready(() => {
 socket.on('error', (err) => {
     console.error(err);
 });
-
-
-const canvas = document.getElementById('bonzi_canvas');
-const gl = canvas.getContext('webgl');
-
-/*const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-
-$("#debug-device-stats").html(`<span>${vendor}<br>${renderer}<br>${navigator.platform}<br>${navigator.userAgent}<br>${navigator.language}<br>${navigator.connection.effectiveType}<br></span>`);*/
 
 //# sourceMappingURL=app.js.map

@@ -192,7 +192,7 @@
 	"banLength": 1440,
 	"sv": {
 		"info": {
-			"ver": "1.03",
+			"ver": "1.04",
 			"name": "BonziWORLD Enhanced",
 			"identifier": "bwe",
 			"isReplit": false,
@@ -202,11 +202,12 @@
 			"client": {
 				"channel": "bonziuniverse-enhanced",
 				"info": {
-					"ver": "v1.03_2024-01-03T01:47:15+00:00",
-					"date": "2024-01-03",
+					"ver": "v1.04_2024-01-09T18:03:22+00:00",
+					"date": "2024-01-09",
 					"isDebug": false,
 					"isBot": false
 				},
+				"max_conn": 3,
 				"ua_blacklist": []
 			}
 		},

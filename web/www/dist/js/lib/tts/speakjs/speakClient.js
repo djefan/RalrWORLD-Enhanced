@@ -24,10 +24,7 @@
 	var isChrome = ((typeof navigator !== 'undefined') && navigator.userAgent &&
 	navigator.userAgent.indexOf('Chrome') !== -1);
 	var chromeVersion = (isChrome) ?
-	parseInt(
-		navigator.userAgent.replace(/^.*?\bChrome\/([0-9]+).*$/, '$1'),
-		10
-	) : 0;
+	parseInt(navigator.userAgent.replace(/^.*?\bChrome\/([0-9]+).*$/, '$1'), 10) : 0;
 	
 	// set up a BufferSource-node
 	var audioContext = new aliasedAudioContext();
@@ -104,20 +101,17 @@
 			new Uint8Array(buffer).set(wav);
 			// TODO: try playAudioDataAPI(data), and fallback if failed
 			playSound(buffer);
-			//if (PROFILE) console.log('speak.js: wav processing took ' + (Date.now() - startTime).toFixed(2) + ' ms');
 		}
 		
 		if (args && args.noWorker) {
 			// Do everything right now. speakGenerator.js must have been loaded.
 			var startTime = Date.now();
 			var wav = generateSpeech(text, args);
-			//if (PROFILE) console.log('speak.js: processing took ' + (Date.now() - startTime).toFixed(2) + ' ms');
 			playSound(wav);
 		} else {
 			// Call the worker, which will return a wav that we then play
 			var startTime = Date.now();
 			speakWorker.onmessage = function (event) {
-				//if (PROFILE) console.log('speak.js: worker processing took ' + (Date.now() - startTime).toFixed(2) + ' ms');
 				handleWav(event.data);
 			};
 			speakWorker.postMessage({ text: text, args: args });
@@ -193,20 +187,17 @@
 			new Uint8Array(buffer).set(wav);
 			// TODO: try playAudioDataAPI(data), and fallback if failed
 			playSound(buffer);
-			//if (PROFILE) console.log('speak.js: wav processing took ' + (Date.now() - startTime).toFixed(2) + ' ms');
 		}
 		
 		if (args && args.noWorker) {
 			// Do everything right now. speakGenerator.js must have been loaded.
 			var startTime = Date.now();
 			var wav = generateSpeech(text, args);
-			//if (PROFILE) console.log('speak.js: processing took ' + (Date.now() - startTime).toFixed(2) + ' ms');
 			playSound(wav);
 		} else {
 			// Call the worker, which will return a wav that we then play
 			var startTime = Date.now();
 			speakWorker.onmessage = function (event) {
-				//if (PROFILE) console.log('speak.js: worker processing took ' + (Date.now() - startTime).toFixed(2) + ' ms');
 				handleWav(event.data);
 			};
 			speakWorker.postMessage({ text: text, args: args });

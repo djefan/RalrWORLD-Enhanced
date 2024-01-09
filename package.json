@@ -1,6 +1,6 @@
 {
   "name": "bonziworld_e_server",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Server for the BonziWORLD Enhanced chat client.",
   "author": "Cosmic",
   "private": true,
@@ -21,18 +21,17 @@
     "node": ">=18"
   },
   "dependencies": {
-    "discord.js": "^14.11.0",
-    "express": "^4.16.4",
+    "discord.js": "^14.14.1",
+    "express": "^4.18.2",
     "fs-extra": "^7.0.1",
-    "got": "^12.5.0",
+    "got": "^12.6.1",
     "http": "^0.0.1-security",
-    "javascript-obfuscator": "^4.0.2",
+    "javascript-obfuscator": "^4.1.0",
     "merge": "^2.1.1",
     "node-emoji": "^2.1.3",
-    "reload": "^3.2.0",
-    "sanitize-html": "^2.3.2",
-    "socket.io": "^2.2.0",
-    "url": "^0.11.0",
-    "winston": "^3.1.0"
+    "sanitize-html": "^2.11.0",
+    "socket.io": "^4.7.3",
+    "url": "^0.11.3",
+    "winston": "^3.11.0"
   }
 }

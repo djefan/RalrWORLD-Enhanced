@@ -66,15 +66,18 @@ let roomsPublic = [];
 let rooms = {};
 var noflood = [];
 
+var connCount = {};
+
 
 exports.exec = () => {
     io.on("connection", (socket) => {
-        if (socket.handshake.query.channel == settings.sv.socketio.client.channel && socket.handshake.query.ver == settings.sv.socketio.client.info.ver && socket.handshake.query.build_date == settings.sv.socketio.client.info.date) {
-            new User(socket);
+        if (socket.handshake.auth.channel == settings.sv.socketio.client.channel && socket.handshake.auth.ver == settings.sv.socketio.client.info.ver && socket.handshake.auth.build_date == settings.sv.socketio.client.info.date) {
+			new User(socket);
         } else {
             io.use((socket, next) => {
                 next(new Error('[BONZI-Err]: Handshake Authorization Failed!	(handshake-auth_fail)'));
                 setTimeout(() => { socket.disconnect(true) }, 3000);
+				return;
             });
         }
     });
@@ -123,9 +126,10 @@ var settingsSantize = {
 
 const { join } = require("path");
 const { EmbedBuilder, WebhookClient } = require('discord.js');
+
 try {
-const chat_hook = new WebhookClient({url: settings.sv.discord.urls.chat});
-} catch (e){};
+	const chat_hook = new WebhookClient({url: settings.sv.discord.urls.chat});
+} catch (e) {};
 
 function getTimeLeft(timeout) {
     return Math.ceil((timeout._idleStart + timeout._idleTimeout - Date.now()) / 1000);
@@ -195,15 +199,15 @@ class Room {
     constructor(rid, prefs) {
         this.rid = rid;
         this.users = [];
-		this.prefs = prefs;
-		this.background = "#6d33a0";
-		this.icon = "fas fa-door-open";
-		this.flags = {
-			admin: false
-		};
+        this.prefs = prefs;
+        this.background = "#6d33a0";
+        this.icon = "fas fa-door-open";
+        this.flags = {
+            admin: false
+        };
     }
-	
-	
+
+
     deconstruct() {
         try {
             this.users.forEach((user) => {
@@ -235,16 +239,16 @@ class Room {
         // HACK
         try {
             this.emit('leave', {
-                 guid: user.guid
+                guid: user.guid
             });
-     
+
             let userIndex = this.users.indexOf(user);
-     
+
             if (userIndex == -1) return;
             this.users.splice(userIndex, 1);
-     
+
             checkRoomEmpty(this);
-        } catch(e) {
+        } catch (e) {
             log.info.log('warn', 'roomLeave', {
                 e: e,
                 thisCtx: this
@@ -253,9 +257,9 @@ class Room {
     }
 
     updateUser(user) {
-		this.emit('update', {
-			guid: user.guid,
-			userPublic: user.public
+        this.emit('update', {
+            guid: user.guid,
+            userPublic: user.public
         });
     }
 
@@ -268,7 +272,7 @@ class Room {
     }
 
     emit(cmd, data) {
-		io.to(this.rid).emit(cmd, data);
+        io.in(this.rid).emit(cmd, data);
     }
 }
 
@@ -436,7 +440,7 @@ let userCommands = {
     changelog: function () {
             this.socket.emit('alert', {
 				title: "Changelog",
-				msg: '<ul><li>Added funny sound effect to the acid theme</li></ul><ul><li>Added hammer icon to popes</li></ul><ul><li>Fixed SpeakJS memory leak</li></ul><ul><li>Added new theme</li></ul>\n',
+				msg: '<ul><li>Updated Socket.io to latest release</li></ul><ul><li>Cleaned up unused imports</li></ul><ul><li>Updated jQuery</li></ul><ul><li>Optimized the chat logger</li></ul>\n',
 				button:"Ok",
 				sanitize: true
 			});
@@ -800,27 +804,15 @@ let userCommands = {
         let argsString = Utils.argsString(arguments);
         if (argsString.length > this.room.prefs.name_limit)
             return;
-        if (argsString.includes("{COLOR}")) {
-            argsString = this.public.color;
-        }
-        if (argsString.includes("{NAME}")) {
-            return;
-        }
-        if (argsString.includes("{ROOM}")) {
-            argsString = sanitizeHTML2(this.room.rid.slice(0,16));
-        }
-        if (argsString.includes("'")) {
-            return;
-        }
-        if (argsString.includes("\"")) {
-            return;
-        }
-        if(argsString.includes('fa-gavel')){
-			return;
-        }
-        if(argsString.includes('🔨')){
-			return;
-        }
+        if (argsString.includes("{COLOR}")) {argsString = this.public.color}
+        if (argsString.includes("{NAME}")) {return}
+        if (argsString.includes("{ROOM}")) {argsString = sanitizeHTML2(this.room.rid.slice(0,16))}
+        if (argsString.includes("'")) {return}
+        if (argsString.includes("\"")) {return}
+        if(argsString.includes('fa-gavel')){return}
+        if(argsString.includes('fa-check-circle')){return}
+        if(argsString.includes('bzw-admin-icon')){return}
+        if(argsString.includes('🔨')){return}
 
 
         if (argsString.trim().match(/f\s+u\s+n\s+e/gi)) {return}
@@ -968,12 +960,11 @@ class User {
         this.guid = Utils.guidGen();
         this.socket = socket;
 
-
         // Handle ban
-	    if (pData.isBanned(this.getIp())) {
+        if (pData.isBanned(this.getIp())) {
             pData.handleBan(this.socket);
         }
-		
+
         this.private = {
             login: false,
             sanitize: true,
@@ -984,7 +975,7 @@ class User {
             color: settings.bonziColors[Math.floor(
                 Math.random() * settings.bonziColors.length
             )],
-			color_cross: 'none'
+            color_cross: 'none'
         };
 
         log.access.log('info', 'connect', {
@@ -992,13 +983,13 @@ class User {
             ip: this.getIp()
         });
 
-       this.socket.on('login', this.login.bind(this));
+        this.socket.on('login', this.login.bind(this));
     }
 
     getIp() {
-        return this.socket.handshake.headers["cf-connecting-ip"] || this.socket.request.connection.remoteAddress;
+        return this.socket.handshake.headers["cf-connecting-ip"] || this.socket.handshake.headers['x-forwarded-for'] || this.socket.request.connection.remoteAddress;
     }
-	
+
     getAgent() {
         return this.socket.handshake.headers["user-agent"];
     }
@@ -1009,38 +1000,37 @@ class User {
 
     login(data) {
         if (typeof data != 'object') return; // Crash fix (issue #9)
-        
+
         if (this.private.login) return;
 
-		log.info.log('info', 'login', {
-			guid: this.guid,
+        log.info.log('info', 'login', {
+            guid: this.guid,
         });
-        
-        let rid = data.room;
-		let motd = data.motd;
-        
-		// Check if room was explicitly specified
-		var roomSpecified = true;
 
-		// If not, set room to public
+        let rid = data.room;
+        let motd = data.motd;
+
+        // Check if room was explicitly specified
+        var roomSpecified = true;
+
+        // If not, set room to public
         if (typeof rid == "undefined" || rid === "" || rid.startsWith("20")) {
             if (rid.startsWith("20")) {
                 this.socket.emit("loginFail", {
                     reason: "nameMal",
                 });
             }
-			rid = roomsPublic[Math.max(roomsPublic.length - 1, 0)];
-			roomSpecified = false;
+            rid = roomsPublic[Math.max(roomsPublic.length - 1, 0)];
+            roomSpecified = false;
         }
 
-        
-		log.info.log('debug', 'roomSpecified', {
-			guid: this.guid,
-			roomSpecified: roomSpecified
+        log.info.log('debug', 'roomSpecified', {
+            guid: this.guid,
+            roomSpecified: roomSpecified
         });
-        
-		// If private room
-		if (roomSpecified) {
+
+        // If private room
+        if (roomSpecified) {
             if (sanitize(rid) != rid) {
                 this.socket.emit("loginFail", {
                     reason: "nameMal"
@@ -1048,40 +1038,50 @@ class User {
                 return;
             }
 
-			// If room does not yet exist
-			if (typeof rooms[rid] == "undefined") {
-				// Clone default settings
-				var tmpPrefs = JSON.parse(JSON.stringify(settings.prefs.private));
-				// Set owner
-				tmpPrefs.owner = this.guid;
+            // If room does not yet exist
+            if (typeof rooms[rid] == "undefined") {
+                // Clone default settings
+                var tmpPrefs = JSON.parse(JSON.stringify(settings.prefs.private));
+                // Set owner
+                tmpPrefs.owner = this.guid;
                 newRoom(rid, tmpPrefs);
-			}
-			// If room is full, fail login
-			else if (rooms[rid].isFull()) {
-				log.info.log('debug', 'loginFail', {
-					guid: this.guid,
-					reason: "full"
-				});
-				return this.socket.emit("loginFail", {
-					reason: "full"
-				});
-			}
-		// If public room
-		} else {
-			// If room does not exist or is full, create new room
-			if ((typeof rooms[rid] == "undefined") || rooms[rid].isFull()) {
-				rid = Utils.guidGen();
-				roomsPublic.push(rid);
-				// Create room
-				newRoom(rid, settings.prefs.public);
-			}
+            }
+            // If room is full, fail login
+            else if (rooms[rid].isFull()) {
+                log.info.log('debug', 'loginFail', {
+                    guid: this.guid,
+                    reason: "full"
+                });
+                return this.socket.emit("loginFail", {
+                    reason: "full"
+                });
+            }
+            // If public room
+        } else {
+            // If room does not exist or is full, create new room
+            if ((typeof rooms[rid] == "undefined") || rooms[rid].isFull()) {
+                rid = Utils.guidGen();
+                roomsPublic.push(rid);
+                // Create room
+                newRoom(rid, settings.prefs.public);
+            }
         }
-        
+
         this.room = rooms[rid];
 
         // Check name
-		this.public.name = sanitize(sanitizeHTML(data.name)) || this.room.prefs.defaultName;
+        this.public.name = sanitize(sanitizeHTML(data.name)) || this.room.prefs.defaultName;
         if(data.name.includes('fa-gavel')){
+			return this.socket.emit("loginFail", {
+				reason: "impersonation"
+			});
+        }
+        if(data.name.includes('fa-check-circle')){
+			return this.socket.emit("loginFail", {
+				reason: "impersonation"
+			});
+        }
+        if(data.name.includes('bzw-admin-icon')){
 			return this.socket.emit("loginFail", {
 				reason: "impersonation"
 			});
@@ -1165,24 +1165,24 @@ class User {
 			});
         }
 
-		if (this.public.name.length > this.room.prefs.name_limit)
-			return this.socket.emit("loginFail", {
-				reason: "nameLength"
-			});
-        
-		if (this.room.prefs.speed.default == "random")
-			this.public.speed = Utils.randomRangeInt(
-				this.room.prefs.speed.min,
-				this.room.prefs.speed.max
-			);
-		else this.public.speed = this.room.prefs.speed.default;
+        if (this.public.name.length > this.room.prefs.name_limit)
+            return this.socket.emit("loginFail", {
+                reason: "nameLength"
+            });
 
-		if (this.room.prefs.pitch.default == "random")
-			this.public.pitch = Utils.randomRangeInt(
-				this.room.prefs.pitch.min,
-				this.room.prefs.pitch.max
-			);
-		else this.public.pitch = this.room.prefs.pitch.default;
+        if (this.room.prefs.speed.default == "random")
+            this.public.speed = Utils.randomRangeInt(
+                this.room.prefs.speed.min,
+                this.room.prefs.speed.max
+            );
+        else this.public.speed = this.room.prefs.speed.default;
+
+        if (this.room.prefs.pitch.default == "random")
+            this.public.pitch = Utils.randomRangeInt(
+                this.room.prefs.pitch.min,
+                this.room.prefs.pitch.max
+            );
+        else this.public.pitch = this.room.prefs.pitch.default;
         let count = 0;
         for (const i in rooms) {
             const room = rooms[i];
@@ -1194,38 +1194,39 @@ class User {
             }
         }
 
-		// i will always find ways to fix things (originally)
+        // i will always find ways to fix things (originally)
         // all though it's mostly just server.erik.red code (thx bathbomb)
-        if (count > 2 && (this.getIp() != "::1" && this.getIp() != "72.23.139.58")) {
+        if (count > 2 && (this.getIp() != "::1")) {
             this.socket.emit("loginFail", {
                 reason: "TooMany",
             });
             return;
         }
-		
+
         // Join room
-		this.room.join(this);
+        this.room.join(this);
 
         this.private.login = true;
-        this.socket.removeAllListeners("login");
+        this.socket.off("login", this.login.bind(this));
 
-		// Send all user info
-		this.socket.emit('updateAll', {
-			usersPublic: this.room.getUsersPublic()
-		});
+        // Send all user info
+        this.socket.emit('updateAll', {
+            usersPublic: this.room.getUsersPublic()
+        });
 
         // Send room info
-		this.socket.emit("room", {
-			room: rid,
-			motd: motd || `Welcome to ${rid}!`,
-			isOwner: this.room.prefs.owner == this.guid,
-			isPublic: roomsPublic.indexOf(rid) != -1,
-		});
+        this.socket.emit("room", {
+            room: rid,
+            motd: motd || `Welcome to ${rid}!`,
+            isOwner: this.room.prefs.owner == this.guid,
+            isPublic: roomsPublic.indexOf(rid) != -1,
+        });
 
         this.socket.on('talk', this.talk.bind(this));
         this.socket.on('command', this.command.bind(this));
         this.socket.on('disconnect', this.disconnect.bind(this));
     }
+
 
     talk(data) {
         if (typeof data != 'object') { // Crash fix (issue #9)
@@ -1233,23 +1234,23 @@ class User {
                 text: "HEY EVERYONE LOOK AT ME I AM TRYING TO SCREW WITH THE SERVER LMAO"
             };
         }
-		
+
         var msg_txt = this.private.sanitize ? sanitize(data.text, settingsSantize) : data.text;
         if (msg_txt.includes("[[") && msg_txt.replace(/[^l]/g, "").length >= 75) data.text = "Suspicious amount of l's found."
         if (msg_txt.includes("[[") && msg_txt.replace(/[^;]/g, "").length >= 75) data.text = "Suspicious amount of semicolon's found."
-	if (msg_txt.match(/(\S*)(inflation)/gi)) {data.text = msg_txt.replaceAll(/(\S*)(inflation)/gi, "\u200B")}
-    
-         log.info.log('info', 'talk', {
+        if (msg_txt.match(/(\S*)(inflation)/gi)) {data.text = msg_txt.replaceAll(/(\S*)(inflation)/gi, "\u200B")}
+
+        log.info.log('info', 'talk', {
             guid: this.guid,
             name: data.name,
             color: this.public.color || "N/A",
             text: data.text
-        }); 
-      
+        });
+
         if (typeof data.text == "undefined")
             return;
 
-		let text = this.private.sanitize ? sanitize(sanitizeHTML(data.text), settingsSantize) : data.text;
+        let text = this.private.sanitize ? sanitize(sanitizeHTML(data.text), settingsSantize) : data.text;
         if ((text.length <= this.room.prefs.char_limit) && (text.length > 0)) {
             this.room.emit('talk', {
                 guid: this.guid,
@@ -1331,20 +1332,16 @@ class User {
 				};
 
 				if (settings.sv.discord.enabled == true) {if (settings.sv.discord.show_embeds == true) {
-					if(txt != ".") {
-						chat_hook.send({username: `${this.public.name}  -  Room ID: ${rid}`, avatarURL: IMAGE_URL, embeds: [messageEmbed]})
-					};
+					if(txt != ".") {chat_hook.send({username: `${this.public.name}  -  Room ID: ${rid}`, avatarURL: IMAGE_URL, embeds: [messageEmbed]})};
 				} else {
-					if(txt != ".") {
-						chat_hook.send({username: `${this.public.name}  -  Room ID: ${rid}`, avatarURL: IMAGE_URL2, content: `> \u0060${txt}\u0060`})
-					};
+					if(txt != ".") {chat_hook.send({username: `${this.public.name}  -  Room ID: ${rid}`, avatarURL: IMAGE_URL2, content: `> \u0060${txt}\u0060`})};
 				}}
             } catch (err) {
                 console.log(`WTF?: ${err.stack}`);
             }
         }
     }
-	
+
     command(data) {
         if (typeof data != 'object') return; // Crash fix (issue #9)
         let name = this.public.name;
@@ -1355,7 +1352,7 @@ class User {
             var list = data.list;
             command = list[0].toLowerCase();
             args = list.slice(1);
-    
+
             log.info.log('debug', command, {
                 guid: this.guid,
                 args: args
@@ -1372,7 +1369,7 @@ class User {
                 this.socket.emit('commandFail', {
                     reason: "runlevel"
                 });
-        } catch(e) {
+        } catch (e) {
             log.info.log('debug', 'commandFail', {
                 guid: this.guid,
                 command: command,
@@ -1387,32 +1384,32 @@ class User {
     }
 
     disconnect() {
-		let ip = "N/A";
-		let port = "N/A";
+        let ip = "N/A";
+        let port = "N/A";
 
-		try {
-			ip = this.getIp();
-			port = this.getPort();
-		} catch(e) { 
-			log.info.log('warn', "exception", {
-				guid: this.guid,
-				exception: e
-			});
-		}
+        try {
+            ip = this.getIp();
+            port = this.getPort();
+        } catch (e) {
+            log.info.log('warn', "exception", {
+                guid: this.guid,
+                exception: e
+            });
+        }
 
-		log.access.log('info', 'disconnect', {
-			guid: this.guid,
-			ip: ip,
-			port: port
-		});
-         
+        log.access.log('info', 'disconnect', {
+            guid: this.guid,
+            ip: ip,
+            port: port
+        });
+
         this.socket.broadcast.emit('leave', {
             guid: this.guid
         });
-        
-        this.socket.removeAllListeners('talk');
-        this.socket.removeAllListeners('command');
-        this.socket.removeAllListeners('disconnect');
+
+        this.socket.off('talk', this.talk.bind(this));
+        this.socket.off('command', this.command.bind(this));
+        this.socket.off('disconnect', this.disconnect.bind(this));
 
         this.room.leave(this);
     }

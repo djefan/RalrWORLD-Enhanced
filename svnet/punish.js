@@ -8,7 +8,7 @@ const { EmbedBuilder, WebhookClient } = require('discord.js');
 try {
 	const reports_hook = new WebhookClient({url: settings.sv.discord.urls.reports});
 	const admx_hook = new WebhookClient({url: settings.sv.discord.urls.admin});
-} catch (e){};
+} catch(e) {};
 
 
 let bans;
