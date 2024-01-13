@@ -10,19 +10,16 @@
 <br>
 
 ### Code Dependencies
-- Sass
 - Git
-- FS
+- FS & FS Extra
 - ExpressJS
-- Discord Webhook Node
-- Cookie Parser
-- Body Parser
+- DiscordJS
+- Socket.io
 - Sanitize HTML
 - Winston
 - URL
 - HTTP
 - Merge
-- Nodemon
 - Got
 
 <br>
